@@ -8,9 +8,6 @@ alias DT = DType.uint64
 alias unit = benchmark.Unit.ns
 
 
-
-
-
 fn main() raises:
     var HV_8_uint8 = HV[2**3, DType.uint8]()
     var HV_512_uint8 = HV[2**9, DType.uint8]()
@@ -47,6 +44,150 @@ fn main() raises:
     var HV_1024_uint64_b = HV[2**10, DType.uint64]()
     var HV_16384_uint64_b = HV[2**14, DType.uint64]()
 
+    # Third set for bundle_majority operation (c)
+    var HV_8_uint8_c = HV[2**3, DType.uint8]()
+    var HV_512_uint8_c = HV[2**9, DType.uint8]()
+    var HV_1024_uint8_c = HV[2**10, DType.uint8]()
+    var HV_16384_uint8_c = HV[2**14, DType.uint8]()
+
+    var HV_512_uint16_c = HV[2**9, DType.uint16]()
+    var HV_1024_uint16_c = HV[2**10, DType.uint16]()
+    var HV_16384_uint16_c = HV[2**14, DType.uint16]()
+
+    var HV_512_uint32_c = HV[2**9, DType.uint32]()
+    var HV_1024_uint32_c = HV[2**10, DType.uint32]()
+    var HV_16384_uint32_c = HV[2**14, DType.uint32]()
+
+    var HV_512_uint64_c = HV[2**9, DType.uint64]()
+    var HV_1024_uint64_c = HV[2**10, DType.uint64]()
+    var HV_16384_uint64_c = HV[2**14, DType.uint64]()
+
+    # Fourth set for bundle_majority operation (d)
+    var HV_8_uint8_d = HV[2**3, DType.uint8]()
+    var HV_512_uint8_d = HV[2**9, DType.uint8]()
+    var HV_1024_uint8_d = HV[2**10, DType.uint8]()
+    var HV_16384_uint8_d = HV[2**14, DType.uint8]()
+
+    var HV_512_uint16_d = HV[2**9, DType.uint16]()
+    var HV_1024_uint16_d = HV[2**10, DType.uint16]()
+    var HV_16384_uint16_d = HV[2**14, DType.uint16]()
+
+    var HV_512_uint32_d = HV[2**9, DType.uint32]()
+    var HV_1024_uint32_d = HV[2**10, DType.uint32]()
+    var HV_16384_uint32_d = HV[2**14, DType.uint32]()
+
+    var HV_512_uint64_d = HV[2**9, DType.uint64]()
+    var HV_1024_uint64_d = HV[2**10, DType.uint64]()
+    var HV_16384_uint64_d = HV[2**14, DType.uint64]()
+
+    # Fifth set for bundle_majority operation (e)
+    var HV_8_uint8_e = HV[2**3, DType.uint8]()
+    var HV_512_uint8_e = HV[2**9, DType.uint8]()
+    var HV_1024_uint8_e = HV[2**10, DType.uint8]()
+    var HV_16384_uint8_e = HV[2**14, DType.uint8]()
+
+    var HV_512_uint16_e = HV[2**9, DType.uint16]()
+    var HV_1024_uint16_e = HV[2**10, DType.uint16]()
+    var HV_16384_uint16_e = HV[2**14, DType.uint16]()
+
+    var HV_512_uint32_e = HV[2**9, DType.uint32]()
+    var HV_1024_uint32_e = HV[2**10, DType.uint32]()
+    var HV_16384_uint32_e = HV[2**14, DType.uint32]()
+
+    var HV_512_uint64_e = HV[2**9, DType.uint64]()
+    var HV_1024_uint64_e = HV[2**10, DType.uint64]()
+    var HV_16384_uint64_e = HV[2**14, DType.uint64]()
+
+    # Sixth set for bundle_majority operation (f)
+    var HV_8_uint8_f = HV[2**3, DType.uint8]()
+    var HV_512_uint8_f = HV[2**9, DType.uint8]()
+    var HV_1024_uint8_f = HV[2**10, DType.uint8]()
+    var HV_16384_uint8_f = HV[2**14, DType.uint8]()
+
+    var HV_512_uint16_f = HV[2**9, DType.uint16]()
+    var HV_1024_uint16_f = HV[2**10, DType.uint16]()
+    var HV_16384_uint16_f = HV[2**14, DType.uint16]()
+
+    var HV_512_uint32_f = HV[2**9, DType.uint32]()
+    var HV_1024_uint32_f = HV[2**10, DType.uint32]()
+    var HV_16384_uint32_f = HV[2**14, DType.uint32]()
+
+    var HV_512_uint64_f = HV[2**9, DType.uint64]()
+    var HV_1024_uint64_f = HV[2**10, DType.uint64]()
+    var HV_16384_uint64_f = HV[2**14, DType.uint64]()
+
+    # Seventh set for bundle_majority operation (g)
+    var HV_8_uint8_g = HV[2**3, DType.uint8]()
+    var HV_512_uint8_g = HV[2**9, DType.uint8]()
+    var HV_1024_uint8_g = HV[2**10, DType.uint8]()
+    var HV_16384_uint8_g = HV[2**14, DType.uint8]()
+
+    var HV_512_uint16_g = HV[2**9, DType.uint16]()
+    var HV_1024_uint16_g = HV[2**10, DType.uint16]()
+    var HV_16384_uint16_g = HV[2**14, DType.uint16]()
+
+    var HV_512_uint32_g = HV[2**9, DType.uint32]()
+    var HV_1024_uint32_g = HV[2**10, DType.uint32]()
+    var HV_16384_uint32_g = HV[2**14, DType.uint32]()
+
+    var HV_512_uint64_g = HV[2**9, DType.uint64]()
+    var HV_1024_uint64_g = HV[2**10, DType.uint64]()
+    var HV_16384_uint64_g = HV[2**14, DType.uint64]()
+
+    # Eighth set for bundle_majority operation (h)
+    var HV_8_uint8_h = HV[2**3, DType.uint8]()
+    var HV_512_uint8_h = HV[2**9, DType.uint8]()
+    var HV_1024_uint8_h = HV[2**10, DType.uint8]()
+    var HV_16384_uint8_h = HV[2**14, DType.uint8]()
+
+    var HV_512_uint16_h = HV[2**9, DType.uint16]()
+    var HV_1024_uint16_h = HV[2**10, DType.uint16]()
+    var HV_16384_uint16_h = HV[2**14, DType.uint16]()
+
+    var HV_512_uint32_h = HV[2**9, DType.uint32]()
+    var HV_1024_uint32_h = HV[2**10, DType.uint32]()
+    var HV_16384_uint32_h = HV[2**14, DType.uint32]()
+
+    var HV_512_uint64_h = HV[2**9, DType.uint64]()
+    var HV_1024_uint64_h = HV[2**10, DType.uint64]()
+    var HV_16384_uint64_h = HV[2**14, DType.uint64]()
+
+    # Ninth set for bundle_majority operation (i)
+    var HV_8_uint8_i = HV[2**3, DType.uint8]()
+    var HV_512_uint8_i = HV[2**9, DType.uint8]()
+    var HV_1024_uint8_i = HV[2**10, DType.uint8]()
+    var HV_16384_uint8_i = HV[2**14, DType.uint8]()
+
+    var HV_512_uint16_i = HV[2**9, DType.uint16]()
+    var HV_1024_uint16_i = HV[2**10, DType.uint16]()
+    var HV_16384_uint16_i = HV[2**14, DType.uint16]()
+
+    var HV_512_uint32_i = HV[2**9, DType.uint32]()
+    var HV_1024_uint32_i = HV[2**10, DType.uint32]()
+    var HV_16384_uint32_i = HV[2**14, DType.uint32]()
+
+    var HV_512_uint64_i = HV[2**9, DType.uint64]()
+    var HV_1024_uint64_i = HV[2**10, DType.uint64]()
+    var HV_16384_uint64_i = HV[2**14, DType.uint64]()
+
+    # Tenth set for bundle_majority operation (j)
+    var HV_8_uint8_j = HV[2**3, DType.uint8]()
+    var HV_512_uint8_j = HV[2**9, DType.uint8]()
+    var HV_1024_uint8_j = HV[2**10, DType.uint8]()
+    var HV_16384_uint8_j = HV[2**14, DType.uint8]()
+
+    var HV_512_uint16_j = HV[2**9, DType.uint16]()
+    var HV_1024_uint16_j = HV[2**10, DType.uint16]()
+    var HV_16384_uint16_j = HV[2**14, DType.uint16]()
+
+    var HV_512_uint32_j = HV[2**9, DType.uint32]()
+    var HV_1024_uint32_j = HV[2**10, DType.uint32]()
+    var HV_16384_uint32_j = HV[2**14, DType.uint32]()
+
+    var HV_512_uint64_j = HV[2**9, DType.uint64]()
+    var HV_1024_uint64_j = HV[2**10, DType.uint64]()
+    var HV_16384_uint64_j = HV[2**14, DType.uint64]()
+
     @parameter
     fn benchmark_pop_count() raises:
         print("--- Benchmarking pop_count ---")
@@ -69,8 +210,6 @@ fn main() raises:
         # 512 | uint64 | 3.3303058981640477
         # 1024 | uint64 | 6.280068170967351
         # 16384 | uint64 | 69.88876883225929
-
-
 
         # Define the benchmark function for pop_count
         @parameter
@@ -138,15 +277,18 @@ fn main() raises:
             var pop_count_time = HV_16384_uint64.pop_count()
             benchmark.keep(pop_count_time)
 
-
         # Run the pop_count benchmark
         var pop_count_time_8 = benchmark.run[bench_pop_count_8]().mean(unit)
         print(HV_8_uint8.D, "|", "uint8", "|", pop_count_time_8)
         var pop_count_time_512 = benchmark.run[bench_pop_count_512]().mean(unit)
         print(HV_512_uint8.D, "|", "uint8", "|", pop_count_time_512)
-        var pop_count_time_1024 = benchmark.run[bench_pop_count_1024]().mean(unit)
+        var pop_count_time_1024 = benchmark.run[bench_pop_count_1024]().mean(
+            unit
+        )
         print(HV_1024_uint8.D, "|", "uint8", "|", pop_count_time_1024)
-        var pop_count_time_16384 = benchmark.run[bench_pop_count_16384]().mean(unit)
+        var pop_count_time_16384 = benchmark.run[bench_pop_count_16384]().mean(
+            unit
+        )
         print(HV_16384_uint8.D, "|", "uint8", "|", pop_count_time_16384)
         var pop_count_time_512_uint16 = benchmark.run[
             bench_pop_count_512_uint16
@@ -159,7 +301,9 @@ fn main() raises:
         var pop_count_time_16384_uint16 = benchmark.run[
             bench_pop_count_16384_uint16
         ]().mean(unit)
-        print(HV_16384_uint16.D, "|", "uint16", "|", pop_count_time_16384_uint16)
+        print(
+            HV_16384_uint16.D, "|", "uint16", "|", pop_count_time_16384_uint16
+        )
         var pop_count_time_512_uint32 = benchmark.run[
             bench_pop_count_512_uint32
         ]().mean(unit)
@@ -171,7 +315,9 @@ fn main() raises:
         var pop_count_time_16384_uint32 = benchmark.run[
             bench_pop_count_16384_uint32
         ]().mean(unit)
-        print(HV_16384_uint32.D, "|", "uint32", "|", pop_count_time_16384_uint32)
+        print(
+            HV_16384_uint32.D, "|", "uint32", "|", pop_count_time_16384_uint32
+        )
         var pop_count_time_512_uint64 = benchmark.run[
             bench_pop_count_512_uint64
         ]().mean(unit)
@@ -183,7 +329,9 @@ fn main() raises:
         var pop_count_time_16384_uint64 = benchmark.run[
             bench_pop_count_16384_uint64
         ]().mean(unit)
-        print(HV_16384_uint64.D, "|", "uint64", "|", pop_count_time_16384_uint64)
+        print(
+            HV_16384_uint64.D, "|", "uint64", "|", pop_count_time_16384_uint64
+        )
 
     fn benchmark_xor() raises:
         print("--- Benchmarking __xor__ ---")
@@ -202,10 +350,9 @@ fn main() raises:
         # 512 | uint32 | 288.87093500504136
         # 1024 | uint32 | 535.0500618117169
         # 16384 | uint32 | 8086.784779390203
-        # 512 | uint64 | 151.0833300120534
+        # 512 | uint64 | 151.08333001205345
         # 1024 | uint64 | 303.0889292844142
         # 16384 | uint64 | 4354.444316181701
-
 
         # --- Benchmarking __xor__ ---
         # Dimension | DType | Mean Time (ns)
@@ -224,7 +371,7 @@ fn main() raises:
         # 1024 | uint64 | 274.43431551448714
         # 16384 | uint64 | 4094.199124580962
 
-         # Define the benchmark function for __xor__
+        # Define the benchmark function for __xor__
         @parameter
         fn bench_xor_8() raises:
             var xor_res = HV_8_uint8 ^ HV_8_uint8_b
@@ -299,29 +446,41 @@ fn main() raises:
         print(HV_1024_uint8.D, "|", "uint8", "|", xor_time_1024)
         var xor_time_16384 = benchmark.run[bench_xor_16384]().mean(unit)
         print(HV_16384_uint8.D, "|", "uint8", "|", xor_time_16384)
-        var xor_time_512_uint16 = benchmark.run[bench_xor_512_uint16]().mean(unit)
+        var xor_time_512_uint16 = benchmark.run[bench_xor_512_uint16]().mean(
+            unit
+        )
         print(HV_512_uint16.D, "|", "uint16", "|", xor_time_512_uint16)
-        var xor_time_1024_uint16 = benchmark.run[bench_xor_1024_uint16]().mean(unit)
+        var xor_time_1024_uint16 = benchmark.run[bench_xor_1024_uint16]().mean(
+            unit
+        )
         print(HV_1024_uint16.D, "|", "uint16", "|", xor_time_1024_uint16)
-        var xor_time_16384_uint16 = benchmark.run[bench_xor_16384_uint16]().mean(
-            unit
-        )
+        var xor_time_16384_uint16 = benchmark.run[
+            bench_xor_16384_uint16
+        ]().mean(unit)
         print(HV_16384_uint16.D, "|", "uint16", "|", xor_time_16384_uint16)
-        var xor_time_512_uint32 = benchmark.run[bench_xor_512_uint32]().mean(unit)
+        var xor_time_512_uint32 = benchmark.run[bench_xor_512_uint32]().mean(
+            unit
+        )
         print(HV_512_uint32.D, "|", "uint32", "|", xor_time_512_uint32)
-        var xor_time_1024_uint32 = benchmark.run[bench_xor_1024_uint32]().mean(unit)
+        var xor_time_1024_uint32 = benchmark.run[bench_xor_1024_uint32]().mean(
+            unit
+        )
         print(HV_1024_uint32.D, "|", "uint32", "|", xor_time_1024_uint32)
-        var xor_time_16384_uint32 = benchmark.run[bench_xor_16384_uint32]().mean(
-            unit
-        )
+        var xor_time_16384_uint32 = benchmark.run[
+            bench_xor_16384_uint32
+        ]().mean(unit)
         print(HV_16384_uint32.D, "|", "uint32", "|", xor_time_16384_uint32)
-        var xor_time_512_uint64 = benchmark.run[bench_xor_512_uint64]().mean(unit)
-        print(HV_512_uint64.D, "|", "uint64", "|", xor_time_512_uint64)
-        var xor_time_1024_uint64 = benchmark.run[bench_xor_1024_uint64]().mean(unit)
-        print(HV_1024_uint64.D, "|", "uint64", "|", xor_time_1024_uint64)
-        var xor_time_16384_uint64 = benchmark.run[bench_xor_16384_uint64]().mean(
+        var xor_time_512_uint64 = benchmark.run[bench_xor_512_uint64]().mean(
             unit
         )
+        print(HV_512_uint64.D, "|", "uint64", "|", xor_time_512_uint64)
+        var xor_time_1024_uint64 = benchmark.run[bench_xor_1024_uint64]().mean(
+            unit
+        )
+        print(HV_1024_uint64.D, "|", "uint64", "|", xor_time_1024_uint64)
+        var xor_time_16384_uint64 = benchmark.run[
+            bench_xor_16384_uint64
+        ]().mean(unit)
         print(HV_16384_uint64.D, "|", "uint64", "|", xor_time_16384_uint64)
 
     fn benchmark_and() raises:
@@ -422,29 +581,41 @@ fn main() raises:
         print(HV_1024_uint8.D, "|", "uint8", "|", and_time_1024)
         var and_time_16384 = benchmark.run[bench_and_16384]().mean(unit)
         print(HV_16384_uint8.D, "|", "uint8", "|", and_time_16384)
-        var and_time_512_uint16 = benchmark.run[bench_and_512_uint16]().mean(unit)
+        var and_time_512_uint16 = benchmark.run[bench_and_512_uint16]().mean(
+            unit
+        )
         print(HV_512_uint16.D, "|", "uint16", "|", and_time_512_uint16)
-        var and_time_1024_uint16 = benchmark.run[bench_and_1024_uint16]().mean(unit)
+        var and_time_1024_uint16 = benchmark.run[bench_and_1024_uint16]().mean(
+            unit
+        )
         print(HV_1024_uint16.D, "|", "uint16", "|", and_time_1024_uint16)
-        var and_time_16384_uint16 = benchmark.run[bench_and_16384_uint16]().mean(
-            unit
-        )
+        var and_time_16384_uint16 = benchmark.run[
+            bench_and_16384_uint16
+        ]().mean(unit)
         print(HV_16384_uint16.D, "|", "uint16", "|", and_time_16384_uint16)
-        var and_time_512_uint32 = benchmark.run[bench_and_512_uint32]().mean(unit)
+        var and_time_512_uint32 = benchmark.run[bench_and_512_uint32]().mean(
+            unit
+        )
         print(HV_512_uint32.D, "|", "uint32", "|", and_time_512_uint32)
-        var and_time_1024_uint32 = benchmark.run[bench_and_1024_uint32]().mean(unit)
+        var and_time_1024_uint32 = benchmark.run[bench_and_1024_uint32]().mean(
+            unit
+        )
         print(HV_1024_uint32.D, "|", "uint32", "|", and_time_1024_uint32)
-        var and_time_16384_uint32 = benchmark.run[bench_and_16384_uint32]().mean(
-            unit
-        )
+        var and_time_16384_uint32 = benchmark.run[
+            bench_and_16384_uint32
+        ]().mean(unit)
         print(HV_16384_uint32.D, "|", "uint32", "|", and_time_16384_uint32)
-        var and_time_512_uint64 = benchmark.run[bench_and_512_uint64]().mean(unit)
-        print(HV_512_uint64.D, "|", "uint64", "|", and_time_512_uint64)
-        var and_time_1024_uint64 = benchmark.run[bench_and_1024_uint64]().mean(unit)
-        print(HV_1024_uint64.D, "|", "uint64", "|", and_time_1024_uint64)
-        var and_time_16384_uint64 = benchmark.run[bench_and_16384_uint64]().mean(
+        var and_time_512_uint64 = benchmark.run[bench_and_512_uint64]().mean(
             unit
         )
+        print(HV_512_uint64.D, "|", "uint64", "|", and_time_512_uint64)
+        var and_time_1024_uint64 = benchmark.run[bench_and_1024_uint64]().mean(
+            unit
+        )
+        print(HV_1024_uint64.D, "|", "uint64", "|", and_time_1024_uint64)
+        var and_time_16384_uint64 = benchmark.run[
+            bench_and_16384_uint64
+        ]().mean(unit)
         print(HV_16384_uint64.D, "|", "uint64", "|", and_time_16384_uint64)
 
     fn benchmark_or() raises:
@@ -563,23 +734,34 @@ fn main() raises:
         print(HV_16384_uint8.D, "|", "uint8", "|", or_time_16384)
         var or_time_512_uint16 = benchmark.run[bench_or_512_uint16]().mean(unit)
         print(HV_512_uint16.D, "|", "uint16", "|", or_time_512_uint16)
-        var or_time_1024_uint16 = benchmark.run[bench_or_1024_uint16]().mean(unit)
+        var or_time_1024_uint16 = benchmark.run[bench_or_1024_uint16]().mean(
+            unit
+        )
         print(HV_1024_uint16.D, "|", "uint16", "|", or_time_1024_uint16)
-        var or_time_16384_uint16 = benchmark.run[bench_or_16384_uint16]().mean(unit)
+        var or_time_16384_uint16 = benchmark.run[bench_or_16384_uint16]().mean(
+            unit
+        )
         print(HV_16384_uint16.D, "|", "uint16", "|", or_time_16384_uint16)
         var or_time_512_uint32 = benchmark.run[bench_or_512_uint32]().mean(unit)
         print(HV_512_uint32.D, "|", "uint32", "|", or_time_512_uint32)
-        var or_time_1024_uint32 = benchmark.run[bench_or_1024_uint32]().mean(unit)
+        var or_time_1024_uint32 = benchmark.run[bench_or_1024_uint32]().mean(
+            unit
+        )
         print(HV_1024_uint32.D, "|", "uint32", "|", or_time_1024_uint32)
-        var or_time_16384_uint32 = benchmark.run[bench_or_16384_uint32]().mean(unit)
+        var or_time_16384_uint32 = benchmark.run[bench_or_16384_uint32]().mean(
+            unit
+        )
         print(HV_16384_uint32.D, "|", "uint32", "|", or_time_16384_uint32)
         var or_time_512_uint64 = benchmark.run[bench_or_512_uint64]().mean(unit)
         print(HV_512_uint64.D, "|", "uint64", "|", or_time_512_uint64)
-        var or_time_1024_uint64 = benchmark.run[bench_or_1024_uint64]().mean(unit)
+        var or_time_1024_uint64 = benchmark.run[bench_or_1024_uint64]().mean(
+            unit
+        )
         print(HV_1024_uint64.D, "|", "uint64", "|", or_time_1024_uint64)
-        var or_time_16384_uint64 = benchmark.run[bench_or_16384_uint64]().mean(unit)
+        var or_time_16384_uint64 = benchmark.run[bench_or_16384_uint64]().mean(
+            unit
+        )
         print(HV_16384_uint64.D, "|", "uint64", "|", or_time_16384_uint64)
-
 
     fn benchmark_invert() raises:
         # __invert__
@@ -678,9 +860,9 @@ fn main() raises:
         print(HV_1024_uint8.D, "|", "uint8", "|", invert_time_1024)
         var invert_time_16384 = benchmark.run[bench_invert_16384]().mean(unit)
         print(HV_16384_uint8.D, "|", "uint8", "|", invert_time_16384)
-        var invert_time_512_uint16 = benchmark.run[bench_invert_512_uint16]().mean(
-            unit
-        )
+        var invert_time_512_uint16 = benchmark.run[
+            bench_invert_512_uint16
+        ]().mean(unit)
         print(HV_512_uint16.D, "|", "uint16", "|", invert_time_512_uint16)
         var invert_time_1024_uint16 = benchmark.run[
             bench_invert_1024_uint16
@@ -690,9 +872,9 @@ fn main() raises:
             bench_invert_16384_uint16
         ]().mean(unit)
         print(HV_16384_uint16.D, "|", "uint16", "|", invert_time_16384_uint16)
-        var invert_time_512_uint32 = benchmark.run[bench_invert_512_uint32]().mean(
-            unit
-        )
+        var invert_time_512_uint32 = benchmark.run[
+            bench_invert_512_uint32
+        ]().mean(unit)
         print(HV_512_uint32.D, "|", "uint32", "|", invert_time_512_uint32)
         var invert_time_1024_uint32 = benchmark.run[
             bench_invert_1024_uint32
@@ -702,9 +884,9 @@ fn main() raises:
             bench_invert_16384_uint32
         ]().mean(unit)
         print(HV_16384_uint32.D, "|", "uint32", "|", invert_time_16384_uint32)
-        var invert_time_512_uint64 = benchmark.run[bench_invert_512_uint64]().mean(
-            unit
-        )
+        var invert_time_512_uint64 = benchmark.run[
+            bench_invert_512_uint64
+        ]().mean(unit)
         print(HV_512_uint64.D, "|", "uint64", "|", invert_time_512_uint64)
         var invert_time_1024_uint64 = benchmark.run[
             bench_invert_1024_uint64
@@ -829,9 +1011,9 @@ fn main() raises:
         print(HV_1024_uint8.D, "|", "uint8", "|", lshift_time_1024)
         var lshift_time_16384 = benchmark.run[bench_lshift_16384]().mean(unit)
         print(HV_16384_uint8.D, "|", "uint8", "|", lshift_time_16384)
-        var lshift_time_512_uint16 = benchmark.run[bench_lshift_512_uint16]().mean(
-            unit
-        )
+        var lshift_time_512_uint16 = benchmark.run[
+            bench_lshift_512_uint16
+        ]().mean(unit)
         print(HV_512_uint16.D, "|", "uint16", "|", lshift_time_512_uint16)
         var lshift_time_1024_uint16 = benchmark.run[
             bench_lshift_1024_uint16
@@ -841,9 +1023,9 @@ fn main() raises:
             bench_lshift_16384_uint16
         ]().mean(unit)
         print(HV_16384_uint16.D, "|", "uint16", "|", lshift_time_16384_uint16)
-        var lshift_time_512_uint32 = benchmark.run[bench_lshift_512_uint32]().mean(
-            unit
-        )
+        var lshift_time_512_uint32 = benchmark.run[
+            bench_lshift_512_uint32
+        ]().mean(unit)
         print(HV_512_uint32.D, "|", "uint32", "|", lshift_time_512_uint32)
         var lshift_time_1024_uint32 = benchmark.run[
             bench_lshift_1024_uint32
@@ -853,9 +1035,9 @@ fn main() raises:
             bench_lshift_16384_uint32
         ]().mean(unit)
         print(HV_16384_uint32.D, "|", "uint32", "|", lshift_time_16384_uint32)
-        var lshift_time_512_uint64 = benchmark.run[bench_lshift_512_uint64]().mean(
-            unit
-        )
+        var lshift_time_512_uint64 = benchmark.run[
+            bench_lshift_512_uint64
+        ]().mean(unit)
         print(HV_512_uint64.D, "|", "uint64", "|", lshift_time_512_uint64)
         var lshift_time_1024_uint64 = benchmark.run[
             bench_lshift_1024_uint64
@@ -868,7 +1050,6 @@ fn main() raises:
 
     fn benchmark_rshift() raises:
         # __rshift__ (using shift by 1)
-
 
         @parameter
         fn bench_rshift_8() raises:
@@ -934,7 +1115,7 @@ fn main() raises:
         fn bench_rshift_16384_uint64() raises:
             var res = HV_16384_uint64 >> 1
             benchmark.keep(res._storage)
-        
+
         print("--- Benchmarking __rshift__ ---")
         print("Dimension | DType | Mean Time (" + String(unit) + ")")
         print("----------|-------|-------------")
@@ -965,9 +1146,9 @@ fn main() raises:
         print(HV_1024_uint8.D, "|", "uint8", "|", rshift_time_1024)
         var rshift_time_16384 = benchmark.run[bench_rshift_16384]().mean(unit)
         print(HV_16384_uint8.D, "|", "uint8", "|", rshift_time_16384)
-        var rshift_time_512_uint16 = benchmark.run[bench_rshift_512_uint16]().mean(
-            unit
-        )
+        var rshift_time_512_uint16 = benchmark.run[
+            bench_rshift_512_uint16
+        ]().mean(unit)
         print(HV_512_uint16.D, "|", "uint16", "|", rshift_time_512_uint16)
         var rshift_time_1024_uint16 = benchmark.run[
             bench_rshift_1024_uint16
@@ -977,9 +1158,9 @@ fn main() raises:
             bench_rshift_16384_uint16
         ]().mean(unit)
         print(HV_16384_uint16.D, "|", "uint16", "|", rshift_time_16384_uint16)
-        var rshift_time_512_uint32 = benchmark.run[bench_rshift_512_uint32]().mean(
-            unit
-        )
+        var rshift_time_512_uint32 = benchmark.run[
+            bench_rshift_512_uint32
+        ]().mean(unit)
         print(HV_512_uint32.D, "|", "uint32", "|", rshift_time_512_uint32)
         var rshift_time_1024_uint32 = benchmark.run[
             bench_rshift_1024_uint32
@@ -989,9 +1170,9 @@ fn main() raises:
             bench_rshift_16384_uint32
         ]().mean(unit)
         print(HV_16384_uint32.D, "|", "uint32", "|", rshift_time_16384_uint32)
-        var rshift_time_512_uint64 = benchmark.run[bench_rshift_512_uint64]().mean(
-            unit
-        )
+        var rshift_time_512_uint64 = benchmark.run[
+            bench_rshift_512_uint64
+        ]().mean(unit)
         print(HV_512_uint64.D, "|", "uint64", "|", rshift_time_512_uint64)
         var rshift_time_1024_uint64 = benchmark.run[
             bench_rshift_1024_uint64
@@ -1129,7 +1310,7 @@ fn main() raises:
         # 1024 | uint64 | 4455.596368331104
         # 16384 | uint64 | 113490.94153263954
 
-        # --- Benchmarking bundle_majority ---
+        # --- Benchmarking bundle_majority optimized ---
         # Dimension | DType | Mean Time (ns)
         # ----------|-------|-------------
         # 8 | uint8 | 98.66347714181164
@@ -1146,10 +1327,27 @@ fn main() raises:
         # 1024 | uint64 | 1906.402456
         # 16384 | uint64 | 28353.15744394301
 
+        # --- Benchmarking bundle_majority parallel ---
+        # Dimension | DType | Mean Time (ns)
+        # ----------|-------|-------------
+        # 8 | uint8 | 2474.959777683534
+        # 512 | uint8 | 2878.7183460369315
+        # 1024 | uint8 | 3288.2766268933774
+        # 16384 | uint8 | 15451.977714501927
+        # 512 | uint16 | 2740.176413781123
+        # 1024 | uint16 | 3040.665973325106
+        # 16384 | uint16 | 11558.729777931478
+        # 512 | uint32 | 2833.9180682835145
+        # 1024 | uint32 | 3294.0991356769023
+        # 16384 | uint32 | 15663.990991638359
+        # 512 | uint64 | 2773.604512862062
+        # 1024 | uint64 | 3071.7500003156197
+        # 16384 | uint64 | 11584.663176021146
+
         # Run the bundle_majority benchmark
-        var bundle_majority_time_8 = benchmark.run[bench_bundle_majority_8]().mean(
-            unit
-        )
+        var bundle_majority_time_8 = benchmark.run[
+            bench_bundle_majority_8
+        ]().mean(unit)
         print(HV_8_uint8.D, "|", "uint8", "|", bundle_majority_time_8)
         var bundle_majority_time_512 = benchmark.run[
             bench_bundle_majority_512
@@ -1166,53 +1364,422 @@ fn main() raises:
         var bundle_majority_time_512_uint16 = benchmark.run[
             bench_bundle_majority_512_uint16
         ]().mean(unit)
-        print(HV_512_uint16.D, "|", "uint16", "|", bundle_majority_time_512_uint16)
+        print(
+            HV_512_uint16.D, "|", "uint16", "|", bundle_majority_time_512_uint16
+        )
         var bundle_majority_time_1024_uint16 = benchmark.run[
             bench_bundle_majority_1024_uint16
         ]().mean(unit)
         print(
-            HV_1024_uint16.D, "|", "uint16", "|", bundle_majority_time_1024_uint16
+            HV_1024_uint16.D,
+            "|",
+            "uint16",
+            "|",
+            bundle_majority_time_1024_uint16,
         )
         var bundle_majority_time_16384_uint16 = benchmark.run[
             bench_bundle_majority_16384_uint16
         ]().mean(unit)
         print(
-            HV_16384_uint16.D, "|", "uint16", "|", bundle_majority_time_16384_uint16
+            HV_16384_uint16.D,
+            "|",
+            "uint16",
+            "|",
+            bundle_majority_time_16384_uint16,
         )
         var bundle_majority_time_512_uint32 = benchmark.run[
             bench_bundle_majority_512_uint32
         ]().mean(unit)
-        print(HV_512_uint32.D, "|", "uint32", "|", bundle_majority_time_512_uint32)
+        print(
+            HV_512_uint32.D, "|", "uint32", "|", bundle_majority_time_512_uint32
+        )
         var bundle_majority_time_1024_uint32 = benchmark.run[
             bench_bundle_majority_1024_uint32
         ]().mean(unit)
         print(
-            HV_1024_uint32.D, "|", "uint32", "|", bundle_majority_time_1024_uint32
+            HV_1024_uint32.D,
+            "|",
+            "uint32",
+            "|",
+            bundle_majority_time_1024_uint32,
         )
         var bundle_majority_time_16384_uint32 = benchmark.run[
             bench_bundle_majority_16384_uint32
         ]().mean(unit)
         print(
-            HV_16384_uint32.D, "|", "uint32", "|", bundle_majority_time_16384_uint32
+            HV_16384_uint32.D,
+            "|",
+            "uint32",
+            "|",
+            bundle_majority_time_16384_uint32,
         )
         var bundle_majority_time_512_uint64 = benchmark.run[
             bench_bundle_majority_512_uint64
         ]().mean(unit)
-        print(HV_512_uint64.D, "|", "uint64", "|", bundle_majority_time_512_uint64)
+        print(
+            HV_512_uint64.D, "|", "uint64", "|", bundle_majority_time_512_uint64
+        )
         var bundle_majority_time_1024_uint64 = benchmark.run[
             bench_bundle_majority_1024_uint64
         ]().mean(unit)
         print(
-            HV_1024_uint64.D, "|", "uint64", "|", bundle_majority_time_1024_uint64
+            HV_1024_uint64.D,
+            "|",
+            "uint64",
+            "|",
+            bundle_majority_time_1024_uint64,
         )
         var bundle_majority_time_16384_uint64 = benchmark.run[
             bench_bundle_majority_16384_uint64
         ]().mean(unit)
         print(
-            HV_16384_uint64.D, "|", "uint64", "|", bundle_majority_time_16384_uint64
+            HV_16384_uint64.D,
+            "|",
+            "uint64",
+            "|",
+            bundle_majority_time_16384_uint64,
         )
 
+    fn benchmark_bundle_majority_10() raises:
+        # bundle_majority (using 10 vectors: a, b, c, d, e, f, g, h, i, j)
+        @parameter
+        fn bench_bundle_majority_10_8() raises:
+            var list = List[HV[2**3, DType.uint8]]()
+            list.append(HV_8_uint8)
+            list.append(HV_8_uint8_b)
+            list.append(HV_8_uint8_c)
+            list.append(HV_8_uint8_d)
+            list.append(HV_8_uint8_e)
+            list.append(HV_8_uint8_f)
+            list.append(HV_8_uint8_g)
+            list.append(HV_8_uint8_h)
+            list.append(HV_8_uint8_i)
+            list.append(HV_8_uint8_j)
+            var res = HV.bundle_majority[2**3, DType.uint8](list)
+            benchmark.keep(res._storage)
 
+        @parameter
+        fn bench_bundle_majority_10_512() raises:
+            var list = List[HV[2**9, DType.uint8]]()
+            list.append(HV_512_uint8)
+            list.append(HV_512_uint8_b)
+            list.append(HV_512_uint8_c)
+            list.append(HV_512_uint8_d)
+            list.append(HV_512_uint8_e)
+            list.append(HV_512_uint8_f)
+            list.append(HV_512_uint8_g)
+            list.append(HV_512_uint8_h)
+            list.append(HV_512_uint8_i)
+            list.append(HV_512_uint8_j)
+            var res = HV.bundle_majority[2**9, DType.uint8](list)
+            benchmark.keep(res._storage)
+
+        @parameter
+        fn bench_bundle_majority_10_1024() raises:
+            var list = List[HV[2**10, DType.uint8]]()
+            list.append(HV_1024_uint8)
+            list.append(HV_1024_uint8_b)
+            list.append(HV_1024_uint8_c)
+            list.append(HV_1024_uint8_d)
+            list.append(HV_1024_uint8_e)
+            list.append(HV_1024_uint8_f)
+            list.append(HV_1024_uint8_g)
+            list.append(HV_1024_uint8_h)
+            list.append(HV_1024_uint8_i)
+            list.append(HV_1024_uint8_j)
+            var res = HV.bundle_majority[2**10, DType.uint8](list)
+            benchmark.keep(res._storage)
+
+        @parameter
+        fn bench_bundle_majority_10_16384() raises:
+            var list = List[HV[2**14, DType.uint8]]()
+            list.append(HV_16384_uint8)
+            list.append(HV_16384_uint8_b)
+            list.append(HV_16384_uint8_c)
+            list.append(HV_16384_uint8_d)
+            list.append(HV_16384_uint8_e)
+            list.append(HV_16384_uint8_f)
+            list.append(HV_16384_uint8_g)
+            list.append(HV_16384_uint8_h)
+            list.append(HV_16384_uint8_i)
+            list.append(HV_16384_uint8_j)
+            var res = HV.bundle_majority[2**14, DType.uint8](list)
+            benchmark.keep(res._storage)
+
+        @parameter
+        fn bench_bundle_majority_10_512_uint16() raises:
+            var list = List[HV[2**9, DType.uint16]]()
+            list.append(HV_512_uint16)
+            list.append(HV_512_uint16_b)
+            list.append(HV_512_uint16_c)
+            list.append(HV_512_uint16_d)
+            list.append(HV_512_uint16_e)
+            list.append(HV_512_uint16_f)
+            list.append(HV_512_uint16_g)
+            list.append(HV_512_uint16_h)
+            list.append(HV_512_uint16_i)
+            list.append(HV_512_uint16_j)
+            var res = HV.bundle_majority[2**9, DType.uint16](list)
+            benchmark.keep(res._storage)
+
+        @parameter
+        fn bench_bundle_majority_10_1024_uint16() raises:
+            var list = List[HV[2**10, DType.uint16]]()
+            list.append(HV_1024_uint16)
+            list.append(HV_1024_uint16_b)
+            list.append(HV_1024_uint16_c)
+            list.append(HV_1024_uint16_d)
+            list.append(HV_1024_uint16_e)
+            list.append(HV_1024_uint16_f)
+            list.append(HV_1024_uint16_g)
+            list.append(HV_1024_uint16_h)
+            list.append(HV_1024_uint16_i)
+            list.append(HV_1024_uint16_j)
+            var res = HV.bundle_majority[2**10, DType.uint16](list)
+            benchmark.keep(res._storage)
+
+        @parameter
+        fn bench_bundle_majority_10_16384_uint16() raises:
+            var list = List[HV[2**14, DType.uint16]]()
+            list.append(HV_16384_uint16)
+            list.append(HV_16384_uint16_b)
+            list.append(HV_16384_uint16_c)
+            list.append(HV_16384_uint16_d)
+            list.append(HV_16384_uint16_e)
+            list.append(HV_16384_uint16_f)
+            list.append(HV_16384_uint16_g)
+            list.append(HV_16384_uint16_h)
+            list.append(HV_16384_uint16_i)
+            list.append(HV_16384_uint16_j)
+            var res = HV.bundle_majority[2**14, DType.uint16](list)
+            benchmark.keep(res._storage)
+
+        @parameter
+        fn bench_bundle_majority_10_512_uint32() raises:
+            var list = List[HV[2**9, DType.uint32]]()
+            list.append(HV_512_uint32)
+            list.append(HV_512_uint32_b)
+            list.append(HV_512_uint32_c)
+            list.append(HV_512_uint32_d)
+            list.append(HV_512_uint32_e)
+            list.append(HV_512_uint32_f)
+            list.append(HV_512_uint32_g)
+            list.append(HV_512_uint32_h)
+            list.append(HV_512_uint32_i)
+            list.append(HV_512_uint32_j)
+            var res = HV.bundle_majority[2**9, DType.uint32](list)
+            benchmark.keep(res._storage)
+
+        @parameter
+        fn bench_bundle_majority_10_1024_uint32() raises:
+            var list = List[HV[2**10, DType.uint32]]()
+            list.append(HV_1024_uint32)
+            list.append(HV_1024_uint32_b)
+            list.append(HV_1024_uint32_c)
+            list.append(HV_1024_uint32_d)
+            list.append(HV_1024_uint32_e)
+            list.append(HV_1024_uint32_f)
+            list.append(HV_1024_uint32_g)
+            list.append(HV_1024_uint32_h)
+            list.append(HV_1024_uint32_i)
+            list.append(HV_1024_uint32_j)
+            var res = HV.bundle_majority[2**10, DType.uint32](list)
+            benchmark.keep(res._storage)
+
+        @parameter
+        fn bench_bundle_majority_10_16384_uint32() raises:
+            var list = List[HV[2**14, DType.uint32]]()
+            list.append(HV_16384_uint32)
+            list.append(HV_16384_uint32_b)
+            list.append(HV_16384_uint32_c)
+            list.append(HV_16384_uint32_d)
+            list.append(HV_16384_uint32_e)
+            list.append(HV_16384_uint32_f)
+            list.append(HV_16384_uint32_g)
+            list.append(HV_16384_uint32_h)
+            list.append(HV_16384_uint32_i)
+            list.append(HV_16384_uint32_j)
+            var res = HV.bundle_majority[2**14, DType.uint32](list)
+            benchmark.keep(res._storage)
+
+        @parameter
+        fn bench_bundle_majority_10_512_uint64() raises:
+            var list = List[HV[2**9, DType.uint64]]()
+            list.append(HV_512_uint64)
+            list.append(HV_512_uint64_b)
+            list.append(HV_512_uint64_c)
+            list.append(HV_512_uint64_d)
+            list.append(HV_512_uint64_e)
+            list.append(HV_512_uint64_f)
+            list.append(HV_512_uint64_g)
+            list.append(HV_512_uint64_h)
+            list.append(HV_512_uint64_i)
+            list.append(HV_512_uint64_j)
+            var res = HV.bundle_majority[2**9, DType.uint64](list)
+            benchmark.keep(res._storage)
+
+        @parameter
+        fn bench_bundle_majority_10_1024_uint64() raises:
+            var list = List[HV[2**10, DType.uint64]]()
+            list.append(HV_1024_uint64)
+            list.append(HV_1024_uint64_b)
+            list.append(HV_1024_uint64_c)
+            list.append(HV_1024_uint64_d)
+            list.append(HV_1024_uint64_e)
+            list.append(HV_1024_uint64_f)
+            list.append(HV_1024_uint64_g)
+            list.append(HV_1024_uint64_h)
+            list.append(HV_1024_uint64_i)
+            list.append(HV_1024_uint64_j)
+            var res = HV.bundle_majority[2**10, DType.uint64](list)
+            benchmark.keep(res._storage)
+
+        @parameter
+        fn bench_bundle_majority_10_16384_uint64() raises:
+            var list = List[HV[2**14, DType.uint64]]()
+            list.append(HV_16384_uint64)
+            list.append(HV_16384_uint64_b)
+            list.append(HV_16384_uint64_c)
+            list.append(HV_16384_uint64_d)
+            list.append(HV_16384_uint64_e)
+            list.append(HV_16384_uint64_f)
+            list.append(HV_16384_uint64_g)
+            list.append(HV_16384_uint64_h)
+            list.append(HV_16384_uint64_i)
+            list.append(HV_16384_uint64_j)
+            var res = HV.bundle_majority[2**14, DType.uint64](list)
+            benchmark.keep(res._storage)
+
+        print("--- Benchmarking bundle_majority (10 vectors) ---")
+        print("Dimension | DType | Mean Time (" + String(unit) + ")")
+        print("----------|-------|-------------")
+
+        # --- Benchmarking bundle_majority (10 vectors) ---
+        # Dimension | DType | Mean Time (ns)
+        # ----------|-------|-------------
+        # 8 | uint8 | 2712.9639936037015
+        # 512 | uint8 | 3617.18601593259
+        # 1024 | uint8 | 4719.520989371252
+        # 16384 | uint8 | 32466.004965028344
+        # 512 | uint16 | 3547.0951674178773
+        # 1024 | uint16 | 4312.358266586798
+        # 16384 | uint16 | 28613.587390282224
+        # 512 | uint32 | 3583.35214844654
+        # 1024 | uint32 | 4559.738433404219
+        # 16384 | uint32 | 29070.23105324524
+        # 512 | uint64 | 3547.9549400926144
+        # 1024 | uint64 | 4222.967206534751
+        # 16384 | uint64 | 24146.93276
+
+        # Run the bundle_majority_10 benchmark
+        var bundle_majority_10_time_8 = benchmark.run[
+            bench_bundle_majority_10_8
+        ]().mean(unit)
+        print(HV_8_uint8.D, "|", "uint8", "|", bundle_majority_10_time_8)
+        var bundle_majority_10_time_512 = benchmark.run[
+            bench_bundle_majority_10_512
+        ]().mean(unit)
+        print(HV_512_uint8.D, "|", "uint8", "|", bundle_majority_10_time_512)
+        var bundle_majority_10_time_1024 = benchmark.run[
+            bench_bundle_majority_10_1024
+        ]().mean(unit)
+        print(HV_1024_uint8.D, "|", "uint8", "|", bundle_majority_10_time_1024)
+        var bundle_majority_10_time_16384 = benchmark.run[
+            bench_bundle_majority_10_16384
+        ]().mean(unit)
+        print(
+            HV_16384_uint8.D, "|", "uint8", "|", bundle_majority_10_time_16384
+        )
+        var bundle_majority_10_time_512_uint16 = benchmark.run[
+            bench_bundle_majority_10_512_uint16
+        ]().mean(unit)
+        print(
+            HV_512_uint16.D,
+            "|",
+            "uint16",
+            "|",
+            bundle_majority_10_time_512_uint16,
+        )
+        var bundle_majority_10_time_1024_uint16 = benchmark.run[
+            bench_bundle_majority_10_1024_uint16
+        ]().mean(unit)
+        print(
+            HV_1024_uint16.D,
+            "|",
+            "uint16",
+            "|",
+            bundle_majority_10_time_1024_uint16,
+        )
+        var bundle_majority_10_time_16384_uint16 = benchmark.run[
+            bench_bundle_majority_10_16384_uint16
+        ]().mean(unit)
+        print(
+            HV_16384_uint16.D,
+            "|",
+            "uint16",
+            "|",
+            bundle_majority_10_time_16384_uint16,
+        )
+        var bundle_majority_10_time_512_uint32 = benchmark.run[
+            bench_bundle_majority_10_512_uint32
+        ]().mean(unit)
+        print(
+            HV_512_uint32.D,
+            "|",
+            "uint32",
+            "|",
+            bundle_majority_10_time_512_uint32,
+        )
+        var bundle_majority_10_time_1024_uint32 = benchmark.run[
+            bench_bundle_majority_10_1024_uint32
+        ]().mean(unit)
+        print(
+            HV_1024_uint32.D,
+            "|",
+            "uint32",
+            "|",
+            bundle_majority_10_time_1024_uint32,
+        )
+        var bundle_majority_10_time_16384_uint32 = benchmark.run[
+            bench_bundle_majority_10_16384_uint32
+        ]().mean(unit)
+        print(
+            HV_16384_uint32.D,
+            "|",
+            "uint32",
+            "|",
+            bundle_majority_10_time_16384_uint32,
+        )
+        var bundle_majority_10_time_512_uint64 = benchmark.run[
+            bench_bundle_majority_10_512_uint64
+        ]().mean(unit)
+        print(
+            HV_512_uint64.D,
+            "|",
+            "uint64",
+            "|",
+            bundle_majority_10_time_512_uint64,
+        )
+        var bundle_majority_10_time_1024_uint64 = benchmark.run[
+            bench_bundle_majority_10_1024_uint64
+        ]().mean(unit)
+        print(
+            HV_1024_uint64.D,
+            "|",
+            "uint64",
+            "|",
+            bundle_majority_10_time_1024_uint64,
+        )
+        var bundle_majority_10_time_16384_uint64 = benchmark.run[
+            bench_bundle_majority_10_16384_uint64
+        ]().mean(unit)
+        print(
+            HV_16384_uint64.D,
+            "|",
+            "uint64",
+            "|",
+            bundle_majority_10_time_16384_uint64,
+        )
 
     arguments = argv()
     if len(arguments) > 1:
@@ -1233,6 +1800,8 @@ fn main() raises:
                 benchmark_rshift()
             elif arg == "bundle_majority":
                 benchmark_bundle_majority()
+            elif arg == "bundle_majority_10":
+                benchmark_bundle_majority_10()
             else:
                 continue
     else:
@@ -1244,3 +1813,4 @@ fn main() raises:
         benchmark_lshift()
         benchmark_rshift()
         benchmark_bundle_majority()
+        benchmark_bundle_majority_10()

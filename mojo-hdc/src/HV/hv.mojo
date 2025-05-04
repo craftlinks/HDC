@@ -334,12 +334,12 @@ struct HV[D: Int = 2**9, dtype: DType = DType.uint64](Writable):
         return result
 
     @staticmethod
-    fn bundle_majority[
+    fn __bundle_majority[
         D: Int, dtype: DType
     ](vectors: List[HV[D, dtype]]) raises -> HV[D, dtype]:
         """
         Bundles multiple Hypervectors using a bitwise majority vote, operating
-        on storage elements for better performance. (Currently has compiler issues)
+        on storage elements for better performance.
 
         Args:
             vectors: A List containing the HV objects to bundle.
@@ -365,8 +365,9 @@ struct HV[D: Int = 2**9, dtype: DType = DType.uint64](Writable):
 
         # If only one vector, return a copy
         if n == 1:
-            var vec: HV[D, dtype] = vectors[0]
-            return vec
+            # This assumes HV has a copy constructor (__copyinit__)
+             return vectors[0] # Assuming __copyinit__ or similar handles this
+
 
         # Iterate through each storage element index
         for k in range(num_storage_elements):
@@ -400,6 +401,150 @@ struct HV[D: Int = 2**9, dtype: DType = DType.uint64](Writable):
             result._storage.store(
                 k, result_element
             )  # Original Error occurred here
+
+        return result
+
+    @staticmethod
+    fn _bundle_majority[
+        D: Int, dtype: DType
+    ](vectors: List[HV[D, dtype]]) raises -> HV[D, dtype]:
+        """
+        Bundles multiple Hypervectors using a bitwise majority vote, operating
+        on storage elements for better performance. (Currently has compiler issues)
+
+        Args:
+            vectors: A List containing the HV objects to bundle.
+
+        Returns:
+            A new HV representing the majority vote bundle.
+
+        Raises:
+            Error: If the input vector list is empty.
+        """
+        var n: Int = len(vectors)
+        if n == 0:
+            raise Error("Cannot bundle an empty list of vectors.")
+
+        # Assume all vectors have the same D and dtype as the first one.
+        # A production environment might add checks here.
+        var first_vec = vectors[0]
+        var num_storage_elements = first_vec._num_storage_elements
+        var bits_per_element = first_vec._bits_per_element
+
+        # Initialize the result vector.
+        var result = HV[D,dtype]()  # Uses __init__ which initializes storage
+
+        # If only one vector, return a copy
+        if n == 1:
+            # Ensure a proper copy is returned if ownership matters,
+            # or modify based on desired semantics.
+            return vectors[0] # Assuming __copyinit__ or similar handles this
+
+        # Iterate through each storage element index
+        for k in range(num_storage_elements):
+            var result_element = Scalar[dtype](
+                0
+            )  # Start with zero for this element
+
+            # Optimization: Load the k-th element from all vectors once.
+            # Using List here; a fixed-size Array might be possible depending
+            # on Mojo's capabilities and constraints on 'n'.
+            var k_elements = List[Scalar[dtype]](n)
+            k_elements.reserve(n) # Pre-allocate memory if n is known
+            for i in range(n):
+                k_elements.append(vectors[i]._storage.load(k))
+
+
+            # Iterate through each bit position within the current storage element
+            for bit_pos in range(bits_per_element):
+                var count: Int = 0
+                var mask = Scalar[dtype](1) << bit_pos
+
+                # Count how many vectors have a '1' at this bit position
+                # using the pre-loaded elements from k_elements.
+                for i in range(n):
+                    # Read from the temporary list instead of memory
+                    var current_element: Scalar[dtype] = k_elements[i]
+                    # Check if the specific bit is set
+                    if (current_element & mask) != 0:
+                        count += 1
+
+                # Set the corresponding bit in the result_element if it's the majority
+                # (count * 2 > n) handles ties by flooring (result bit is 0)
+                if count * 2 > n:
+                    result_element |= mask
+
+            # Store the computed majority element into the result vector's storage
+            result._storage.store(
+                k, result_element
+            )
+
+        return result
+
+    @staticmethod
+    fn bundle_majority[ # Or rename to bundle_majority_parallel
+        D: Int, dtype: DType
+    ](vectors: List[HV[D, dtype]]) raises -> HV[D, dtype]:
+        """
+        Bundles multiple Hypervectors using a bitwise majority vote, operating
+        on storage elements in parallel for performance.
+
+        Args:
+            vectors: A List containing the HV objects to bundle.
+
+        Returns:
+            A new HV representing the majority vote bundle.
+
+        Raises:
+            Error: If the input vector list is empty.
+        """
+        var n: Int = len(vectors)
+        if n == 0:
+            raise Error("Cannot bundle an empty list of vectors.")
+
+        var bits_per_element = dtype.bitwidth()
+        var num_storage_elements = D // bits_per_element
+
+        # Initialize the result vector.
+        var result = HV[D, dtype]() # Uses __init__ which initializes storage
+
+        # If only one vector, return a copy
+        if n == 1:
+            # Assuming __copyinit__ handles the copy
+            return vectors[0]
+
+        # Define the kernel for parallel processing of storage elements
+        @parameter
+        fn process_element(k: Int):
+            var result_element = Scalar[dtype](0) # Accumulator for the k-th element
+
+            # Iterate through each bit position within the current storage element
+            for bit_pos in range(bits_per_element):
+                var count: Int = 0
+                var mask = Scalar[dtype](1) << bit_pos
+
+                # Count how many vectors have a '1' at this bit position
+                # within the k-th storage element.
+                # Load directly within this loop as the List optimization was slower.
+                for i in range(n):
+                    # Load the k-th storage element from the i-th vector
+                    # Ensure `vectors` is captured correctly by the parallel context.
+                    var current_element: Scalar[dtype] = vectors[i]._storage.load(k)
+                    # Check if the specific bit is set
+                    if (current_element & mask) != 0:
+                        count += 1
+
+                # Set the corresponding bit in the result_element if it's the majority
+                # (count * 2 > n) handles ties by flooring (result bit is 0)
+                if count * 2 > n:
+                    result_element |= mask
+
+            # Store the computed majority element into the result vector's storage
+            # This write is safe because each parallel task writes to a unique 'k'
+            result._storage.store(k, result_element)
+
+        # Execute the kernel in parallel over all storage elements
+        parallelize[process_element](num_storage_elements) # Distributes k loop
 
         return result
 
