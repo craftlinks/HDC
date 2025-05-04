@@ -74,7 +74,7 @@ fn test_getitem_setitem() raises:
 fn test_bitwise_ops() raises:
     """Tests bitwise AND, OR, XOR, INVERT, and bind."""
     alias D = 64
-    alias DT = DType.uint8
+    alias DT = DType.uint64
     var hv1 = HV[D, DT]()
     var hv2 = HV[D, DT]()
 
@@ -118,8 +118,8 @@ fn test_bitwise_ops() raises:
 
 fn test_arithmetic_ops_disabled() raises:
     """Tests that +, -, * (as XOR) work as expected."""
-    var hv1 = HV[32, DType.uint32]()
-    var hv2 = HV[32, DType.uint32]()
+    var hv1 = HV[64, DType.uint64]()
+    var hv2 = HV[64, DType.uint64]()
 
     with assert_raises():  # Addition should raise
         _ = hv1 + hv2
@@ -130,7 +130,7 @@ fn test_arithmetic_ops_disabled() raises:
     # Multiplication should be XOR
     var hv_mul = hv1 * hv2
     var hv_xor = hv1 ^ hv2
-    for i in range(32):
+    for i in range(64):
         assert_equal(hv_mul[i], hv_xor[i], "Multiplication (*) is not XOR")
 
 

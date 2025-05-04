@@ -111,21 +111,57 @@ struct HV[D: Int = 2**9, dtype: DType = DType.uint64](Writable):
     fn __or__(self, other: Self) raises -> Self:
         """Performs bitwise OR between two BitVectors using vectorized operations.
         """
+        # var result = Self()
+        # for i in range(self._num_storage_elements):
+        #     result._storage.store(
+        #         i, self._storage.load(i) | other._storage.load(i)
+        #     )
+        # return result
+
         var result = Self()
-        for i in range(self._num_storage_elements):
-            result._storage.store(
-                i, self._storage.load(i) | other._storage.load(i)
-            )
+        # Use the struct's nelts alias for the vector width
+        alias vec_width = self.nelts
+
+        # Define the kernel function to be vectorized
+        @parameter
+        fn or_kernel[vec_width: Int](idx: Int):
+            # Load SIMD vectors from self and other
+            var self_vec = self._storage.load[width=vec_width](idx)
+            var other_vec = other._storage.load[width=vec_width](idx)
+            # Perform SIMD OR and store the result
+            result._storage.store(idx, self_vec | other_vec)
+
+        # Apply the vectorized kernel over the storage elements
+        vectorize[or_kernel, vec_width, size = D // dtype.bitwidth()]()
+
         return result
 
     fn __xor__(self, other: Self) raises -> Self:
         """Performs bitwise XOR between two BitVectors using vectorized operations.
         """
+        # var result = Self()
+        # for i in range(self._num_storage_elements):
+        #     result._storage.store(
+        #         i, self._storage.load(i) ^ other._storage.load(i)
+        #     )
+        # return result
+
         var result = Self()
-        for i in range(self._num_storage_elements):
-            result._storage.store(
-                i, self._storage.load(i) ^ other._storage.load(i)
-            )
+        # Use the struct's nelts alias for the vector width
+        alias vec_width = self.nelts
+
+        # Define the kernel function to be vectorized
+        @parameter
+        fn xor_kernel[vec_width: Int](idx: Int):
+            # Load SIMD vectors from self and other
+            var self_vec = self._storage.load[width=vec_width](idx)
+            var other_vec = other._storage.load[width=vec_width](idx)
+            # Perform SIMD XOR and store the result
+            result._storage.store(idx, self_vec ^ other_vec)
+
+        # Apply the vectorized kernel over the storage elements
+        vectorize[xor_kernel, vec_width, size = D // dtype.bitwidth()]()
+
         return result
 
     fn __invert__(self) raises -> Self:
@@ -143,21 +179,46 @@ struct HV[D: Int = 2**9, dtype: DType = DType.uint64](Writable):
         if D_val == 0:
             return Self()  # Return an empty vector if D is 0
 
+        # Calculate the effective shift amount (non-negative)
         var s: Int = k % D_val
-        # Ensure s is non-negative for consistent modulo behavior
         if s < 0:
             s += D_val
 
         if s == 0:
-            return self
+            return self  # No shift needed
 
-        var result = Self()  # Initialize result vector
+        # Calculate shift in terms of storage elements and bits within elements
+        var element_shift: Int = s // self._bits_per_element
+        var bit_shift_within_element: Int = s % self._bits_per_element
 
-        # Copy bit by bit based on circular *right* shift logic (indices decrease)
-        for j in range(D_val):
-            # Source index for internal right shift
-            var source_idx: Int = (j + s) % D_val
-            result[j] = self[source_idx]  # Use getitem/setitem
+        var result = Self()  # Initialize the result vector
+
+        # Implement the element-wise shift logic here
+        var B: Int = self._bits_per_element
+        var N: Int = self._num_storage_elements
+
+        if bit_shift_within_element == 0:
+            # Simple case: shift only by whole elements
+            for i in range(N):
+                var src_idx: Int = (i + element_shift) % N
+                result._storage.store(i, self._storage.load(src_idx))
+        else:
+            # Complex case: shift involves bits across element boundaries
+            var right_shift: Int = bit_shift_within_element
+            var left_shift: Int = B - right_shift
+            for i in range(N):
+                # Source indices in the original storage array
+                var src_idx1: Int = (i + element_shift) % N
+                var src_idx2: Int = (i + element_shift + 1) % N
+
+                # Load the two source elements
+                var val1 = self._storage.load(src_idx1)
+                var val2 = self._storage.load(src_idx2)
+
+                # Combine the bits
+                var combined_val = (val1 >> right_shift) | (val2 << left_shift)
+
+                result._storage.store(i, combined_val)
 
         return result
 
@@ -167,23 +228,55 @@ struct HV[D: Int = 2**9, dtype: DType = DType.uint64](Writable):
         var D_val: Int = D
         var k: Int = other
         if D_val == 0:
-            return Self()  # Return an empty vector if D is 0
+            return Self()
 
+        # Calculate the effective shift amount (non-negative)
         var s: Int = k % D_val
-        # Ensure s is non-negative for consistent modulo behavior
         if s < 0:
             s += D_val
 
         if s == 0:
-            return self
+            return self  # No shift needed
 
-        var result = Self()  # Initialize result vector
+        var result = Self()  # Initialize the result vector
+        var B: Int = self._bits_per_element
+        var N: Int = self._num_storage_elements
 
-        # Copy bit by bit based on circular *left* shift logic (indices increase)
-        for j in range(D_val):
-            # Source index for internal left shift
-            var source_idx: Int = (j - s + D_val) % D_val
-            result[j] = self[source_idx]  # Use getitem/setitem
+        # Calculate shift in terms of storage elements and bits within elements
+        # Note: internal shift is *left* for a visual right shift
+        var element_shift: Int = s // B
+        var bit_shift_within_element: Int = s % B
+
+        # Implement the element-wise right shift logic here
+        if bit_shift_within_element == 0:
+            # Simple case: shift only by whole elements (internal left shift)
+            for i in range(N):
+                # Source index calculation for internal left shift
+                var src_idx: Int = (i - element_shift + N) % N
+                result._storage.store(i, self._storage.load(src_idx))
+        else:
+            # Complex case: shift involves bits across element boundaries
+            var left_shift = bit_shift_within_element
+            var right_shift = B - left_shift
+            for i in range(N):
+                # Source indices for internal left shift
+                # src_idx1 provides upper bits (shifted left)
+                # src_idx2 provides lower bits (shifted right)
+                var src_idx1: Int = (i - element_shift + N) % N
+                var src_idx2: Int = (
+                    i - element_shift - 1 + N
+                ) % N  # Previous element
+
+                # Load the two source elements
+                var val1 = self._storage.load(src_idx1)
+                var val2 = self._storage.load(src_idx2)
+
+                # Combine the bits for right shift (visual)
+                # Upper bits come from val1 shifted left
+                # Lower bits come from val2 shifted right
+                var combined_val = (val1 << left_shift) | (val2 >> right_shift)
+
+                result._storage.store(i, combined_val)
 
         return result
 

@@ -4,8 +4,8 @@ import benchmark
 
 
 def main():
-    alias D = 16
-    alias DT = DType.uint8
+    alias D = 64
+    alias DT = DType.uint64
     var hv1 = HV[D, DT]()
     var hv2 = HV[D, DT]()
 
@@ -15,6 +15,9 @@ def main():
 
     print("hv1: ", hv1)
     print("hv2: ", hv2)
+
+    var hv_mul = hv1 * hv2
+    print("hv_mul: ", hv_mul)
 
     # AND (&)
     print("hv_and: ", hv1 & hv2)
@@ -62,16 +65,3 @@ def main():
     vector_list.append(hv3)
     var hv_bundle = HV.bundle_majority[D, DT](vector_list)
     print("hv_bundle: ", hv_bundle)
-
-    # --- Benchmarking ---
-    print("\n--- Benchmarking ---")
-    alias unit = benchmark.Unit.ms
-
-    # Benchmark pop_count
-    @parameter
-    fn bench_pop_count():
-        # Re-use hv1 for the benchmark
-        _ = hv1.pop_count()
-
-    var pop_count_time = benchmark.run[bench_pop_count]().mean(unit)
-    print("pop_count:", pop_count_time, unit)
