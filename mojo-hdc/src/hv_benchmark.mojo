@@ -1129,6 +1129,23 @@ fn main() raises:
         # 1024 | uint64 | 4455.596368331104
         # 16384 | uint64 | 113490.94153263954
 
+        # --- Benchmarking bundle_majority ---
+        # Dimension | DType | Mean Time (ns)
+        # ----------|-------|-------------
+        # 8 | uint8 | 98.66347714181164
+        # 512 | uint8 | 1255.7844551089281
+        # 1024 | uint8 | 2241.122221
+        # 16384 | uint8 | 33561.28601007275
+        # 512 | uint16 | 1176.9171751295012
+        # 1024 | uint16 | 2269.768118
+        # 16384 | uint16 | 33260.86152420214
+        # 512 | uint32 | 1158.2176089784166
+        # 1024 | uint32 | 2232.567849
+        # 16384 | uint32 | 34014.2553037711
+        # 512 | uint64 | 991.5494265146629
+        # 1024 | uint64 | 1906.402456
+        # 16384 | uint64 | 28353.15744394301
+
         # Run the bundle_majority benchmark
         var bundle_majority_time_8 = benchmark.run[bench_bundle_majority_8]().mean(
             unit

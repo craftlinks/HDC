@@ -263,9 +263,11 @@ fn test_bundle_majority() raises:
         if hv3[i]:
             count += 1
         expected = count > 1  # Majority for n=3
+
         assert_equal(
             bundled1[i], expected, "Bundle (n=3) failed at index " + String(i)
         )
+
 
     # --- Test Case 2: Even number of vectors (tie-break to 0) ---
     var hv4 = HV[D, DT]()
@@ -312,4 +314,5 @@ fn test_bundle_majority() raises:
     # --- Test Case 4: Empty list ---
     var vectors_empty = List[HV[D, DT]]()
     with assert_raises():
-        _ = HV.bundle_majority[D, DT](vectors_empty)
+        var bundled_empty = HV.bundle_majority[D, DT](vectors_empty)
+

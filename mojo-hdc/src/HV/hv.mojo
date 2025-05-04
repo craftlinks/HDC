@@ -286,7 +286,7 @@ struct HV[D: Int = 2**9, dtype: DType = DType.uint64](Writable):
         return self ^ other
 
     @staticmethod
-    fn bundle_majority[
+    fn bundle_majority_naive[
         D: Int, dtype: DType
     ](vectors: List[Self]) raises -> Self:
         """
@@ -330,6 +330,76 @@ struct HV[D: Int = 2**9, dtype: DType = DType.uint64](Writable):
             # - If count < n/2, then count*2 < n (False -> set bit to 0)
             # - If count == n/2 (only for even n), then count*2 == n (False -> set bit to 0, tie-break)
             result[j] = count * 2 > n
+
+        return result
+
+    @staticmethod
+    fn bundle_majority[
+        D: Int, dtype: DType
+    ](vectors: List[HV[D, dtype]]) raises -> HV[D, dtype]:
+        """
+        Bundles multiple Hypervectors using a bitwise majority vote, operating
+        on storage elements for better performance. (Currently has compiler issues)
+
+        Args:
+            vectors: A List containing the HV objects to bundle.
+
+        Returns:
+            A new HV representing the majority vote bundle.
+
+        Raises:
+            Error: If the input vector list is empty.
+        """
+        var n: Int = len(vectors)
+        if n == 0:
+            raise Error("Cannot bundle an empty list of vectors.")
+
+        # Assume all vectors have the same D and dtype as the first one.
+        # A production environment might add checks here.
+        var first_vec = vectors[0]
+        var num_storage_elements = first_vec._num_storage_elements
+        var bits_per_element = first_vec._bits_per_element
+
+        # Initialize the result vector.
+        var result = HV[D,dtype]()  # Uses __init__ which initializes storage
+
+        # If only one vector, return a copy
+        if n == 1:
+            var vec: HV[D, dtype] = vectors[0]
+            return vec
+
+        # Iterate through each storage element index
+        for k in range(num_storage_elements):
+            var result_element = Scalar[dtype](
+                0
+            )  # Start with zero for this element
+
+            # Iterate through each bit position within the current storage element
+            for bit_pos in range(bits_per_element):
+                var count: Int = 0
+                var mask = Scalar[dtype](1) << bit_pos
+
+                # Count how many vectors have a '1' at this bit position
+                # within the k-th storage element
+                for i in range(n):
+                    # Load the k-th storage element from the i-th vector
+                    # Explicitly type annotate to potentially help compiler
+                    var current_element: Scalar[dtype] = Scalar[dtype](
+                        vectors[i]._storage.load(k)
+                    )
+                    # Check if the specific bit is set
+                    if (current_element & mask) != 0:
+                        count += 1
+
+                # Set the corresponding bit in the result_element if it's the majority
+                # (count * 2 > n) handles ties by flooring (result bit is 0)
+                if count * 2 > n:
+                    result_element |= mask
+
+            # Store the computed majority element into the result vector's storage
+            result._storage.store(
+                k, result_element
+            )  # Original Error occurred here
 
         return result
 
