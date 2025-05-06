@@ -1,4 +1,4 @@
-# Project Name
+# Mojo-HDC
 
 This project utilizes Mojo and interacts with a Redis database for vector
 storage and similarity search operations.
