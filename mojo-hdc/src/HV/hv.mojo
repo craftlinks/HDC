@@ -5,6 +5,7 @@ from sys import info, simdwidthof
 from bit import pop_count
 import time
 from utils.numerics import max_finite, min_finite
+from python import Python, PythonObject
 
 
 struct HV[D: Int = 2**14, dtype: DType = DType.uint64](Writable):
@@ -49,11 +50,50 @@ struct HV[D: Int = 2**14, dtype: DType = DType.uint64](Writable):
         self._bits_per_element = existing._bits_per_element
         self._storage = existing._storage
 
+    fn Dim(self):
+        """Prints the dimension D of the HV."""
+        print("D:", D)
+
+    fn internal_type(self):
+        """Prints the dtype of the HV."""
+        print("dtype:", dtype)
+
     fn __str__(self) -> String:
         return String.write(self)
 
     fn __repr__(self) -> String:
         return self.__str__()
+
+    fn to_python_list_of_ints(self) raises -> PythonObject:
+        """
+        Converts the HV into a Python list of integers (0 or 1),
+        representing the bits of the hypervector in MSB-first order.
+        """
+        var pylist: PythonObject = Python.list()
+        # Python lists in CPython have overallocation, explicit reserve might not be directly
+        # available or as critical as for Mojo native List if D is very large and created often.
+        # If performance indicates list appends are a major bottleneck, further investigation
+        # into Python list creation strategies from Mojo might be needed.
+
+        var bits_per_element_val: Int = self._bits_per_element
+        for storage_idx in range(self._num_storage_elements):
+            var current_element_val: Scalar[dtype] = self._storage.load(
+                storage_idx
+            )
+            # Iterate bits from MSB to LSB within this storage element
+            # This matches the order of HV.bits() and HV.__getitem__(0) being the overall MSB.
+            for bit_pos_in_element_from_msb in range(bits_per_element_val):
+                var bit_offset_from_lsb: Int = (
+                    bits_per_element_val - 1
+                ) - bit_pos_in_element_from_msb
+                var mask: Scalar[dtype] = Scalar[dtype](
+                    1
+                ) << bit_offset_from_lsb
+                if (current_element_val & mask) != 0:
+                    pylist.append(1)
+                else:
+                    pylist.append(0)
+        return pylist
 
     @always_inline
     fn _get_indices(self, bit_index: Int) raises -> (Int, Int):
