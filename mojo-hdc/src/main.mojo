@@ -38,7 +38,7 @@ def main():
     print("hv1_lshift: ", hv1 << 1)
 
     # rshift
-    print("hv1_rshift: ", hv1 >> 2)
+    print("hv1_rshift: ", hv1 >> 1)
 
     # pop_count
     print("hv1_pop_count: ", hv1.pop_count())
@@ -65,3 +65,6 @@ def main():
     vector_list.append(hv3)
     var hv_bundle = HV.bundle_majority[D, DT](vector_list)
     print("hv_bundle: ", hv_bundle)
+
+    # Test the new bits() method
+    print("hv_bundle.bits(): ", hv_bundle.bits())
