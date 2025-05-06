@@ -188,6 +188,178 @@ fn main() raises:
     var HV_1024_uint64_j = HV[2**10, DType.uint64]()
     var HV_16384_uint64_j = HV[2**14, DType.uint64]()
 
+    fn benchmark_creation() raises:
+        print("--- Benchmarking HV Creation ---")
+        print("Dimension | DType | Mean Time (" + String(unit) + ")")
+        print("----------|-------|-------------")
+
+        # --- Benchmarking HV Creation ---
+        # Dimension | DType | Mean Time (ns)
+        # ----------|-------|-------------
+        # 8 | uint8 | 27.018865598835806
+        # 512 | uint8 | 243.84073848793255
+        # 1024 | uint8 | 479.5606531824031
+        # 16384 | uint8 | 7076.82025732662
+        # 512 | uint16 | 141.12699269054687
+        # 1024 | uint16 | 265.36346660502574
+        # 16384 | uint16 | 3955.529341766707
+        # 512 | uint32 | 273.55596133045935
+        # 1024 | uint32 | 522.1371910834515
+        # 16384 | uint32 | 8003.977495629895
+        # 512 | uint64 | 150.82250099748822
+        # 1024 | uint64 | 276.73295871551437
+        # 16384 | uint64 | 4088.781991320749
+
+
+        @parameter
+        fn bench_creation_8_uint8() raises:
+            var hv = HV[2**3, DType.uint8]()
+            benchmark.keep(hv._storage)
+
+        @parameter
+        fn bench_creation_512_uint8() raises:
+            var hv = HV[2**9, DType.uint8]()
+            benchmark.keep(hv._storage)
+
+        @parameter
+        fn bench_creation_1024_uint8() raises:
+            var hv = HV[2**10, DType.uint8]()
+            benchmark.keep(hv._storage)
+
+        @parameter
+        fn bench_creation_16384_uint8() raises:
+            var hv = HV[2**14, DType.uint8]()
+            benchmark.keep(hv._storage)
+
+        @parameter
+        fn bench_creation_512_uint16() raises:
+            var hv = HV[2**9, DType.uint16]()
+            benchmark.keep(hv._storage)
+
+        @parameter
+        fn bench_creation_1024_uint16() raises:
+            var hv = HV[2**10, DType.uint16]()
+            benchmark.keep(hv._storage)
+
+        @parameter
+        fn bench_creation_16384_uint16() raises:
+            var hv = HV[2**14, DType.uint16]()
+            benchmark.keep(hv._storage)
+
+        @parameter
+        fn bench_creation_512_uint32() raises:
+            var hv = HV[2**9, DType.uint32]()
+            benchmark.keep(hv._storage)
+
+        @parameter
+        fn bench_creation_1024_uint32() raises:
+            var hv = HV[2**10, DType.uint32]()
+            benchmark.keep(hv._storage)
+
+        @parameter
+        fn bench_creation_16384_uint32() raises:
+            var hv = HV[2**14, DType.uint32]()
+            benchmark.keep(hv._storage)
+
+        @parameter
+        fn bench_creation_512_uint64() raises:
+            var hv = HV[2**9, DType.uint64]()
+            benchmark.keep(hv._storage)
+
+        @parameter
+        fn bench_creation_1024_uint64() raises:
+            var hv = HV[2**10, DType.uint64]()
+            benchmark.keep(hv._storage)
+
+        @parameter
+        fn bench_creation_16384_uint64() raises:
+            var hv = HV[2**14, DType.uint64]()
+            benchmark.keep(hv._storage)
+
+        var creation_time_8_uint8 = benchmark.run[
+            bench_creation_8_uint8
+        ]().mean(unit)
+        print(String(2**3) + " | uint8 | " + String(creation_time_8_uint8))
+        var creation_time_512_uint8 = benchmark.run[
+            bench_creation_512_uint8
+        ]().mean(unit)
+        print(String(2**9) + " | uint8 | " + String(creation_time_512_uint8))
+        var creation_time_1024_uint8 = benchmark.run[
+            bench_creation_1024_uint8
+        ]().mean(unit)
+        print(
+            String(2**10) + " | uint8 | " + String(creation_time_1024_uint8)
+        )
+        var creation_time_16384_uint8 = benchmark.run[
+            bench_creation_16384_uint8
+        ]().mean(unit)
+        print(
+            String(2**14) + " | uint8 | " + String(creation_time_16384_uint8)
+        )
+
+        var creation_time_512_uint16 = benchmark.run[
+            bench_creation_512_uint16
+        ]().mean(unit)
+        print(
+            String(2**9) + " | uint16 | " + String(creation_time_512_uint16)
+        )
+        var creation_time_1024_uint16 = benchmark.run[
+            bench_creation_1024_uint16
+        ]().mean(unit)
+        print(
+            String(2**10) + " | uint16 | " + String(creation_time_1024_uint16)
+        )
+        var creation_time_16384_uint16 = benchmark.run[
+            bench_creation_16384_uint16
+        ]().mean(unit)
+        print(
+            String(2**14)
+            + " | uint16 | "
+            + String(creation_time_16384_uint16)
+        )
+
+        var creation_time_512_uint32 = benchmark.run[
+            bench_creation_512_uint32
+        ]().mean(unit)
+        print(
+            String(2**9) + " | uint32 | " + String(creation_time_512_uint32)
+        )
+        var creation_time_1024_uint32 = benchmark.run[
+            bench_creation_1024_uint32
+        ]().mean(unit)
+        print(
+            String(2**10) + " | uint32 | " + String(creation_time_1024_uint32)
+        )
+        var creation_time_16384_uint32 = benchmark.run[
+            bench_creation_16384_uint32
+        ]().mean(unit)
+        print(
+            String(2**14)
+            + " | uint32 | "
+            + String(creation_time_16384_uint32)
+        )
+
+        var creation_time_512_uint64 = benchmark.run[
+            bench_creation_512_uint64
+        ]().mean(unit)
+        print(
+            String(2**9) + " | uint64 | " + String(creation_time_512_uint64)
+        )
+        var creation_time_1024_uint64 = benchmark.run[
+            bench_creation_1024_uint64
+        ]().mean(unit)
+        print(
+            String(2**10) + " | uint64 | " + String(creation_time_1024_uint64)
+        )
+        var creation_time_16384_uint64 = benchmark.run[
+            bench_creation_16384_uint64
+        ]().mean(unit)
+        print(
+            String(2**14)
+            + " | uint64 | "
+            + String(creation_time_16384_uint64)
+        )
+
     @parameter
     fn benchmark_pop_count() raises:
         print("--- Benchmarking pop_count ---")
@@ -1802,9 +1974,12 @@ fn main() raises:
                 benchmark_bundle_majority()
             elif arg == "bundle_majority_10":
                 benchmark_bundle_majority_10()
+            elif arg == "creation":
+                benchmark_creation()
             else:
                 continue
     else:
+        benchmark_creation()
         benchmark_pop_count()
         benchmark_xor()
         benchmark_and()
