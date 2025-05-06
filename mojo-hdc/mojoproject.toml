@@ -11,3 +11,4 @@ tests = "mojo test -I src test"
 
 [dependencies]
 max = "*"
+redis-py = ">=6.0.0,<7"
