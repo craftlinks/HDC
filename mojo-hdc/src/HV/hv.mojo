@@ -11,13 +11,24 @@ from python import Python, PythonObject
 struct HV[D: Int = 2**14, dtype: DType = DType.uint64](Writable):
     alias nelts = 2 * simdwidthof[dtype]()
 
+    var key: String
+    var attribute: String
+
     # Calculate the number of UInt64 elements needed for storage
     var _num_storage_elements: Int
     var _bits_per_element: Int
     var _storage: UnsafePointer[Scalar[dtype]]
 
-    fn __init__(out self) raises:
+    fn __init__(
+        out self,
+        key: String = "hv",
+        attribute: String = "default",
+        from_embedding: Optional[List[Int]] = None,
+    ) raises:
         """Initializes the bit vector to random values."""
+        self.key = key
+        self.attribute = attribute
+
         self._bits_per_element = dtype.bitwidth()
         if D % self._bits_per_element != 0:
             raise Error(
@@ -28,15 +39,62 @@ struct HV[D: Int = 2**14, dtype: DType = DType.uint64](Writable):
         self._storage = UnsafePointer[Scalar[dtype]].alloc(
             self._num_storage_elements
         )
-        seedf(time.monotonic())
-        random.randint[dtype](
-            self._storage,
-            self._num_storage_elements,
-            low=Int(min_finite[dtype]()),
-            high=Int(max_finite[dtype]()),
-        )
+        if from_embedding:
+            var embedding_list: List[Int] = from_embedding.value()
+            if len(embedding_list) != D:
+                self._storage.free()  # Free memory if dimensions don't match
+                raise Error(
+                    "Length of from_embedding list ("
+                    + String(len(embedding_list))
+                    + ") must match D ("
+                    + String(D)
+                    + ")."
+                )
+
+            # Initialize all storage elements to zero first
+            for i in range(self._num_storage_elements):
+                self._storage.store(i, Scalar[dtype](0))
+
+            # Populate the hypervector bits from the embedding list
+            # bit_d_index is the overall index from 0 to D-1, consistent with HV's MSB-first indexing.
+            for bit_d_index in range(D):
+                var bit_value: Int = embedding_list[bit_d_index]
+                if bit_value == 1:
+                    # Calculate the storage index and the bit position (offset from LSB) within that storage element.
+                    # self._get_indices handles the MSB-first interpretation of bit_d_index.
+                    var storage_element_idx: Int
+                    var bit_offset_in_element_from_lsb: Int
+                    (
+                        storage_element_idx,
+                        bit_offset_in_element_from_lsb,
+                    ) = self._get_indices(bit_d_index)
+
+                    var mask: Scalar[dtype] = Scalar[dtype](
+                        1
+                    ) << bit_offset_in_element_from_lsb
+                    self._storage[storage_element_idx] |= mask
+                # elif bit_value != -1:
+                #     self._storage.free()  # Free memory on invalid input
+                #     raise Error(
+                #         "from_embedding list must contain only -1s and 1s. Found"
+                #         " value "
+                #         + String(bit_value)
+                #         + " at index "
+                #         + String(bit_d_index)
+                #         + "."
+                #     )
+        else:
+            seedf(time.monotonic())
+            random.randint[dtype](
+                self._storage,
+                self._num_storage_elements,
+                low=Int(min_finite[dtype]()),
+                high=Int(max_finite[dtype]()),
+            )
 
     fn __copyinit__(out self, existing: Self):
+        self.key = existing.key
+        self.attribute = existing.attribute
         self._num_storage_elements = existing._num_storage_elements
         self._bits_per_element = existing._bits_per_element
         self._storage = UnsafePointer[Scalar[dtype]].alloc(
@@ -46,6 +104,8 @@ struct HV[D: Int = 2**14, dtype: DType = DType.uint64](Writable):
             self._storage.store(i, existing._storage.load(i))
 
     fn __moveinit__(out self, owned existing: Self):
+        self.key = existing.key
+        self.attribute = existing.attribute
         self._num_storage_elements = existing._num_storage_elements
         self._bits_per_element = existing._bits_per_element
         self._storage = existing._storage

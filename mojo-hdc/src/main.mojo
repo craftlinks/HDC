@@ -1,6 +1,7 @@
-from HV import HV
+from HV import HV, HVS
 from collections import List
 import benchmark
+from python import Python, PythonObject
 
 
 def main():
@@ -68,3 +69,29 @@ def main():
 
     # Test the new bits() method
     print("hv_bundle.bits(): ", hv_bundle.bits())
+
+    # Test the new hvs.mojo
+
+    # Connect to Redis
+    var redis_module = Python.import_module("redis")
+    var r = redis_module.Redis(
+        host="localhost", port=6379, db=0, decode_responses=True
+    )
+    print("r: ", r)
+
+    var hvs = HVS[D, DT](r)
+    print("hvs initialized")
+    var hv = HV[D, DT](key="test_hv", attribute="REDIS_TEST")
+    print("hv: ", hv)
+    key = hvs.add_hv(hv)
+    print("key: ", key)
+    retrieved_hv = hvs.hv(key)
+    print("retrieved_hv: ", retrieved_hv)
+    var attributes = hvs.hv_attribute(key)
+    print("attributes: ", attributes)
+
+
+    # TODO: fix this
+    # with HVS[D, DT](r) as new_hvs:
+    #     new_hvs.add_hv(hv)
+    #     print("new_hvs: ", new_hvs)

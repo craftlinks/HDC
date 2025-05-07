@@ -1,6 +1,6 @@
 from python import Python, PythonObject
-from HV.hv import HV  # Assuming HV.mojo is in src/HV/hv.mojo
-from collections import List  # Mojo's List for storing one of the Python lists
+from HV.hv import HV 
+from collections import List 
 
 
 fn main() raises:
