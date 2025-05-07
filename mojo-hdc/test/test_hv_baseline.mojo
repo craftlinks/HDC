@@ -357,7 +357,7 @@ fn test_hvs_operations() raises:
         var hvs_to_add_list = List[HV[D_hvs, DT_hvs]]()
         hvs_to_add_list.append(hv2)
         hvs_to_add_list.append(hv3)
-        
+
         var added_keys_list = hvs.add_hvs(hvs_to_add_list)
         assert_equal(len(added_keys_list), 2, "add_hvs returned incorrect number of keys")
         assert_equal(added_keys_list[0], "hv_key_2", "First key from add_hvs mismatch")
@@ -380,12 +380,113 @@ fn test_hvs_operations() raises:
 
         var hv = hvs.hv(retrieved_hv1)
         assert_equal(hv.key, "hv_key_1", "hv returned incorrect key")
-        
-        
 
     except e:
         print("Critical: Failed to run HVS operations tests: " + String(e))
+        # Ensure cleanup even on failure
+        # rc.delete(test_set_name)
         raise Error("HVS operations tests failed.")
+    finally:
+        pass
+        # Clean up the test set from Redis
+        # print("Cleaning up HVS test set:", test_set_name)
+        # rc.delete(test_set_name)
+
+
+fn test_associative_memory_retrieval() raises:
+    """Tests associative memory retrieval using HVS and bundled bindings."""
+    alias D_hvs = 64 * 157  # Default D for HVS, consistent with redis.mojo
+    alias DT_hvs = DType.uint64  # Default dtype for HVS
+
+    var redis_module = Python.import_module("redis")
+    var rc: PythonObject
+    try:
+        rc = redis_module.Redis(host="localhost", port=6379, db=0, decode_responses=True)
+        rc.ping()
+    except e:
+        print("Critical: Failed to connect to Redis for associative memory test: " + String(e))
+        raise Error("Redis connection failed, associative memory test cannot proceed.")
+
+    var test_set_name = "mojo_assoc_mem_test_set_unique456"
+    # Ensure the set is clean before starting
+    rc.delete(test_set_name)
+
+    var hvs_store = HVS[D_hvs, DT_hvs](rc, test_set_name)
+
+    try:
+        # 1. Initialize Hypervectors (HVs)
+        var A = HV[D_hvs, DT_hvs](key="A", attribute="Letter A")
+        var B = HV[D_hvs, DT_hvs](key="B", attribute="Letter B")
+        var C = HV[D_hvs, DT_hvs](key="C", attribute="Letter C")
+        var X = HV[D_hvs, DT_hvs](key="X", attribute="Letter X")
+        var Y = HV[D_hvs, DT_hvs](key="Y", attribute="Letter Y")
+        var Z = HV[D_hvs, DT_hvs](key="Z", attribute="Letter Z")
+
+        # 2. Store these HVs in the HVS instance
+        var all_hvs_list = List[HV[D_hvs, DT_hvs]]()
+        all_hvs_list.append(A)
+        all_hvs_list.append(B)
+        all_hvs_list.append(C)
+        all_hvs_list.append(X)
+        all_hvs_list.append(Y)
+        all_hvs_list.append(Z)
+        _ = hvs_store.add_hvs(all_hvs_list)
+
+        # 3. Create bindings
+        var AX_bind = A * X
+        var BY_bind = B * Y
+        var CZ_bind = C * Z
+
+        # 4. Bundle these bindings
+        var binding_list = List[HV[D_hvs, DT_hvs]]()
+        binding_list.append(AX_bind)
+        binding_list.append(BY_bind)
+        binding_list.append(CZ_bind)
+        var BUNDLE = HV.bundle_majority[D_hvs, DT_hvs](binding_list)
+        BUNDLE.key = "BUNDLE" # Assign a key for potential debugging/storage if needed
+        BUNDLE.attribute = "A-X, B-Y, C-Z"
+
+        # (Optional) Add BUNDLE itself to HVS if you want to inspect it via Redis
+        # _ = hvs_store.add_hv(BUNDLE)
+
+        # 5. Test associative retrieval
+        # A --> X
+        var retrieved_key_for_A = hvs_store.hv_key(BUNDLE * A, num_results=1)
+        assert_equal(retrieved_key_for_A, "X", "Retrieval for A*BUNDLE failed. Expected X, got " + retrieved_key_for_A)
+
+        # B --> Y
+        var retrieved_key_for_B = hvs_store.hv_key(BUNDLE * B, num_results=1)
+        assert_equal(retrieved_key_for_B, "Y", "Retrieval for B*BUNDLE failed. Expected Y, got " + retrieved_key_for_B)
+
+        # C --> Z
+        var retrieved_key_for_C = hvs_store.hv_key(BUNDLE * C, num_results=1)
+        assert_equal(retrieved_key_for_C, "Z", "Retrieval for C*BUNDLE failed. Expected Z, got " + retrieved_key_for_C)
+
+        # X --> A
+        var retrieved_key_for_X = hvs_store.hv_key(BUNDLE * X, num_results=1)
+        assert_equal(retrieved_key_for_X, "A", "Retrieval for X*BUNDLE failed. Expected A, got " + retrieved_key_for_X)
+
+        # Y --> B
+        var retrieved_key_for_Y = hvs_store.hv_key(BUNDLE * Y, num_results=1)
+        assert_equal(retrieved_key_for_Y, "B", "Retrieval for Y*BUNDLE failed. Expected B, got " + retrieved_key_for_Y)
+
+        # Z --> C
+        var retrieved_key_for_Z = hvs_store.hv_key(BUNDLE * Z, num_results=1)
+        assert_equal(retrieved_key_for_Z, "C", "Retrieval for Z*BUNDLE failed. Expected C, got " + retrieved_key_for_Z)
+
+        print("Associative memory retrieval test passed for set: " + test_set_name)
+
+    except e:
+        print("Critical: Failed during associative memory test logic: " + String(e))
+        # Ensure cleanup even on failure within the try block
+        rc.delete(test_set_name)
+        raise Error("Associative memory test logic failed.")
+    finally:
+        pass
+        # Clean up the test set from Redis
+        # print("Cleaning up associative memory test set:", test_set_name)
+        # rc.delete(test_set_name)
+
 
 fn main() raises:
     test_valid_initialization()
@@ -397,8 +498,8 @@ fn main() raises:
     test_pop_count()
     test_bundle_majority()
     test_hvs_operations()
+    test_associative_memory_retrieval()
 
     print("--------------------------------------")
     print("All HV and HVS baseline tests passed!")
     print("--------------------------------------")
-

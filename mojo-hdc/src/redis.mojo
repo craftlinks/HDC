@@ -1,10 +1,9 @@
 from python import Python, PythonObject
 from HV import HV, HVS
-from collections import List 
+from collections import List
 
 
 fn main() raises:
-    var num_vectors: Int = 10
     var redis_set_name: String = "mojo_hv_set_binary"
 
     # Connect to Redis
@@ -24,42 +23,29 @@ fn main() raises:
     print("Deleting old set (if any):", redis_set_name)
     r.delete(redis_set_name)
 
-    
-    alias D = 128
+    alias D = 64 * 157
     alias DT = DType.uint64
 
     var hvs = HVS[D, DT](r, redis_set_name)
 
     # Create and store HV vectors
-    for i in range(num_vectors):
-        var hv = HV[D, DT](key="hv_" + String(i), attribute="attr_" + String(i) )
+    var A = HV[D, DT]("A", "A")
+    var B = HV[D, DT]("B", "B")
+    var C = HV[D, DT]("C", "C")
 
-        var py_list_of_ints = hv.to_python_list_of_ints()
+    var X = HV[D, DT]("X", "X")
+    var Y = HV[D, DT]("Y", "Y")
+    var Z = HV[D, DT]("Z", "Z")
 
-        var element_name = "hv_" + String(i)
-        print(
-            "Adding",
-            element_name,
-            "to Redis set '" + redis_set_name + "' (dim:",
-            D,
-            ", quantization: BIN)",
-        )
+    var HV_LIST = List[HV[D, DT]](A, B, C, X, Y, Z)
 
-        _ = hvs.add_hv(hv)
+    var BINDING_LIST = List[HV[D, DT]](A * X, B * Y, C * Z)
 
-    var retrieved_hv = hvs.hv_from_key("hv_0")
-    print("Retrieved HV:", retrieved_hv)
+    var BUNDLE= HV.bundle_majority[D, DT](BINDING_LIST)
 
-    var attributes = hvs.hv_attribute("hv_0")
-    print("Attributes:", attributes)
+    _ = hvs.add_hvs(HV_LIST)
 
-    var hv_key = hvs.hv_key(retrieved_hv)
-    print("HV Key:", hv_key)
-
-    var retrieved_hv_from_key = hvs.hv_from_key(hv_key)
-    print("Retrieved HV from key:", retrieved_hv_from_key)
-
-    var hv= hvs.hv(retrieved_hv)
-    print("HV:", hv)
-    
-
+    for i in range(len(HV_LIST)):
+        original = HV_LIST[i]
+        var key = hvs.hv_key(BUNDLE * original)
+        print(original.key, "-->", key)
