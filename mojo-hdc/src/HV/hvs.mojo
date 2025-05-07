@@ -23,11 +23,7 @@ struct HVS[D: Int = 64*157, dtype: DType = DType.uint64]:
         # Delete the set if it already exists
         self._redis.delete(self._set_name)
 
-    fn add_hv(self, hv: HV) raises -> String:
-        # Check if the hv is of the correct type
-        if hv.D != D or hv.dtype != dtype:
-            raise Error("HV dimensions and data type must match the HVS dimensions and data type")
-        
+    fn add_hv(self, hv: HV[D, dtype]) raises -> String:
         var _attributes = Python.dict()
         _attributes["attribute"] = hv.attribute
         
@@ -39,11 +35,21 @@ struct HVS[D: Int = 64*157, dtype: DType = DType.uint64]:
             quantization=self._bin_quantization_option,
         )
         return hv.key
+
+    fn add_hvs(self, hvs: List[HV[D, dtype]]) raises -> List[String]:
+        var keys = List[String]()
+        for i in range(len(hvs)):
+            var key = self.add_hv(hvs[i])
+            keys.append(key)
+        return keys
+
     fn hv_key(self, hv: HV, num_results: Int = 1) raises -> String:
         var key = self._vset_commands.vsim(self._set_name, hv.to_python_list_of_ints(), count=num_results)
-        return String(key)
+        if len(key) == 0:
+            raise Error("No key found for HV")
+        return String(key[0])
 
-    fn hv(self, key: String) raises -> HV[D, dtype]:
+    fn hv_from_key(self, key: String) raises -> HV[D, dtype]:
         var embedding_py: PythonObject = self._vset_commands.vemb(self._set_name, key)
         var attributes: String = self.hv_attribute(key)
         var embedding_mojo = List[Int]()
@@ -52,11 +58,11 @@ struct HVS[D: Int = 64*157, dtype: DType = DType.uint64]:
             var item_py: PythonObject = embedding_py[i]
             embedding_mojo.append(Int(item_py))
         return HV[D, dtype](key, attributes, from_embedding=embedding_mojo)
+
+    fn hv(self, hv: HV, num_results: Int = 1) raises -> HV[D, dtype]:
+        var key = self.hv_key(hv, num_results)
+        return self.hv_from_key(key)
     
     fn hv_attribute(self, key: String, num_results: Int = 1) raises -> String:
         attributes = self._vset_commands.vgetattr(self._set_name, key)
         return String(attributes)
-    
-    fn __exit__(self) raises:
-        print("Deleting set:", self._set_name)
-        self._redis.delete(self._set_name)

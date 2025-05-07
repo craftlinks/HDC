@@ -1,7 +1,7 @@
 from testing import assert_equal, assert_false, assert_raises, assert_true
-from HV import HV
+from HV import HV, HVS
 from collections import List
-
+from python import Python, PythonObject
 
 fn test_valid_initialization() raises:
     """Tests HV initialization with valid D and dtype combinations."""
@@ -315,4 +315,90 @@ fn test_bundle_majority() raises:
     var vectors_empty = List[HV[D, DT]]()
     with assert_raises():
         var bundled_empty = HV.bundle_majority[D, DT](vectors_empty)
+
+
+fn test_hvs_operations() raises:
+    """Tests HVS functionality including adding, retrieving HVs, and attribute handling."""
+    alias D_hvs = 64 * 157  # Default D for HVS
+    alias DT_hvs = DType.uint64  # Default dtype for HVS
+
+    var redis_module = Python.import_module("redis")
+    var rc: PythonObject
+    try:
+        rc = redis_module.Redis(host="localhost", port=6379, db=0, decode_responses=True)
+        rc.ping()  # Check connection
+    except e:
+        print("Critical: Failed to connect to Redis for HVS tests: " + String(e))
+        raise Error("Redis connection failed, HVS tests cannot proceed.")
+
+    var test_set_name = "mojo_hvs_test_fixture_set_unique123"
+    # HVS __init__ already deletes the set, but good practice for robustness
+    rc.delete(test_set_name)
+
+    var hvs = HVS[D_hvs, DT_hvs](rc, test_set_name)
+
+    try:
+        var hv1 = HV[D_hvs, DT_hvs](key="hv_key_1", attribute="attr_val_1")
+        var added_key1 = hvs.add_hv(hv1)
+        assert_equal(added_key1, "hv_key_1", "add_hv returned incorrect key")
+
+        var retrieved_hv1 = hvs.hv_from_key("hv_key_1")
+        assert_equal(retrieved_hv1.key, "hv_key_1", "Retrieved HV has incorrect key")
+        # Attributes are stored as Python dict {'attribute': value}, then stringified
+        assert_equal(retrieved_hv1.attribute, "{\'attribute\': \'attr_val_1\'}", "Retrieved HV has incorrect attribute string")
+        assert_equal(retrieved_hv1.D, D_hvs, "Retrieved HV has incorrect D")
+        assert_equal(retrieved_hv1.dtype, DT_hvs, "Retrieved HV has incorrect dtype")
+        for i in range(D_hvs):
+            assert_equal(retrieved_hv1[i], hv1[i], "Vector data mismatch for hv1 at index " + String(i))
+
+        var hv2 = HV[D_hvs, DT_hvs](key="hv_key_2", attribute="attr_val_2")
+        var hv3 = HV[D_hvs, DT_hvs](key="hv_key_3", attribute="attr_val_3")
+
+        var hvs_to_add_list = List[HV[D_hvs, DT_hvs]]()
+        hvs_to_add_list.append(hv2)
+        hvs_to_add_list.append(hv3)
+        
+        var added_keys_list = hvs.add_hvs(hvs_to_add_list)
+        assert_equal(len(added_keys_list), 2, "add_hvs returned incorrect number of keys")
+        assert_equal(added_keys_list[0], "hv_key_2", "First key from add_hvs mismatch")
+        assert_equal(added_keys_list[1], "hv_key_3", "Second key from add_hvs mismatch")
+
+        var retrieved_hv2 = hvs.hv_from_key("hv_key_2")
+        assert_equal(retrieved_hv2.key, "hv_key_2")
+        assert_equal(retrieved_hv2.attribute, "{\'attribute\': \'attr_val_2\'}")
+        for i in range(D_hvs):
+            assert_equal(retrieved_hv2[i], hv2[i], "Vector data mismatch for hv2 at index " + String(i))
+
+        var attr_val_from_hvs = hvs.hv_attribute("hv_key_1")
+        assert_equal(attr_val_from_hvs, "{\'attribute\': \'attr_val_1\'}", "hv_attribute returned incorrect string")
+
+        var hv_key = hvs.hv_key(retrieved_hv1)
+        assert_equal(hv_key, "hv_key_1", "hv_key returned incorrect key")
+
+        var retrieved_hv_from_key = hvs.hv_from_key(hv_key)
+        assert_equal(retrieved_hv_from_key.key, "hv_key_1", "Retrieved HV from key has incorrect key")
+
+        var hv = hvs.hv(retrieved_hv1)
+        assert_equal(hv.key, "hv_key_1", "hv returned incorrect key")
+        
+        
+
+    except e:
+        print("Critical: Failed to run HVS operations tests: " + String(e))
+        raise Error("HVS operations tests failed.")
+
+fn main() raises:
+    test_valid_initialization()
+    test_invalid_initialization_raises()
+    test_getitem_setitem()
+    test_bitwise_ops()
+    test_arithmetic_ops_disabled()
+    test_shift_ops()
+    test_pop_count()
+    test_bundle_majority()
+    test_hvs_operations()
+
+    print("--------------------------------------")
+    print("All HV and HVS baseline tests passed!")
+    print("--------------------------------------")
 

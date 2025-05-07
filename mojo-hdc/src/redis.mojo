@@ -1,5 +1,5 @@
 from python import Python, PythonObject
-from HV.hv import HV 
+from HV import HV, HVS
 from collections import List 
 
 
@@ -24,80 +24,42 @@ fn main() raises:
     print("Deleting old set (if any):", redis_set_name)
     r.delete(redis_set_name)
 
-    var first_hv_py_list: PythonObject = Python.list()  # Initialize as an empty Python list
-    var D_val: Int = 0  # To store the dimension
+    
+    alias D = 128
+    alias DT = DType.uint64
+
+    var hvs = HVS[D, DT](r, redis_set_name)
 
     # Create and store HV vectors
     for i in range(num_vectors):
-        var hv = HV[]()
+        var hv = HV[D, DT](key="hv_" + String(i), attribute="attr_" + String(i) )
 
         var py_list_of_ints = hv.to_python_list_of_ints()
-        D_val = py_list_of_ints.__len__()  # Get dimension
-
-        if i == 0:
-            first_hv_py_list = py_list_of_ints
 
         var element_name = "hv_" + String(i)
         print(
             "Adding",
             element_name,
             "to Redis set '" + redis_set_name + "' (dim:",
-            D_val,
+            D,
             ", quantization: BIN)",
         )
 
-        # Add to Redis vector set using BIN quantization
-        var vset_commands = r.vset()
-        var add_result = vset_commands.vadd(
-            redis_set_name,
-            py_list_of_ints,
-            element_name,
-            quantization=bin_quantization_option,  # Specify BIN quantization
-        )
-        # print("Result of VADD for", element_name, ":", add_result)
+        _ = hvs.add_hv(hv)
 
-    print("Finished adding vectors.")
-    var vset_commands = r.vset()
-    print(
-        "Number of elements in set '" + redis_set_name + "':",
-        vset_commands.vcard(redis_set_name),
-    )
-    print(
-        "Dimension of vectors in set '" + redis_set_name + "':",
-        vset_commands.vdim(redis_set_name),
-    )
+    var retrieved_hv = hvs.hv_from_key("hv_0")
+    print("Retrieved HV:", retrieved_hv)
 
-    # Test retrieval
-    if num_vectors > 0 and first_hv_py_list:
-        var query_element_name: String = "hv_0"
+    var attributes = hvs.hv_attribute("hv_0")
+    print("Attributes:", attributes)
 
-        print(
-            "\nQuerying for vectors similar to",
-            query_element_name,
-            "using its vector data directly:",
-        )
-        var similar_by_vector = vset_commands.vsim(
-            redis_set_name,
-            first_hv_py_list,
-            count=num_vectors,
-            with_scores=True,
-        )
-        print("Similar (by vector query):", similar_by_vector)
+    var hv_key = hvs.hv_key(retrieved_hv)
+    print("HV Key:", hv_key)
 
-        print(
-            "\nQuerying for vectors similar to",
-            query_element_name,
-            "using its element name:",
-        )
-        var similar_by_name = vset_commands.vsim(
-            redis_set_name,
-            query_element_name,
-            count=num_vectors,
-            with_scores=True,
-        )
-        print("Similar (by element name query):", similar_by_name)
+    var retrieved_hv_from_key = hvs.hv_from_key(hv_key)
+    print("Retrieved HV from key:", retrieved_hv_from_key)
 
-    # Optional: cleanup by deleting the set
-    print("\nDeleting set:", redis_set_name)
-    r.delete(redis_set_name)
-    print("Set deleted.")
+    var hv= hvs.hv(retrieved_hv)
+    print("HV:", hv)
+    
+

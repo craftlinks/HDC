@@ -85,7 +85,7 @@ def main():
     print("hv: ", hv)
     key = hvs.add_hv(hv)
     print("key: ", key)
-    retrieved_hv = hvs.hv(key)
+    var retrieved_hv = hvs.hv_from_key(key)
     print("retrieved_hv: ", retrieved_hv)
     var attributes = hvs.hv_attribute(key)
     print("attributes: ", attributes)
