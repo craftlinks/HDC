@@ -210,7 +210,6 @@ fn main() raises:
         # 1024 | uint64 | 276.73295871551437
         # 16384 | uint64 | 4088.781991320749
 
-
         @parameter
         fn bench_creation_8_uint8() raises:
             var hv = HV[2**3, DType.uint8]()
@@ -1357,108 +1356,134 @@ fn main() raises:
 
     fn benchmark_bundle_majority() raises:
         # bundle_majority (using 3 vectors: a, b, c)
+
+        var list_8_uint8 = List[HV[2**3, DType.uint8]]()
+        list_8_uint8.append(HV_8_uint8)
+        list_8_uint8.append(HV_8_uint8_b)
+
+        var list_512_uint8 = List[HV[2**9, DType.uint8]]()
+        list_512_uint8.append(HV_512_uint8)
+        list_512_uint8.append(HV_512_uint8_b)
+
+        var list_1024_uint8 = List[HV[2**10, DType.uint8]]()
+        list_1024_uint8.append(HV_1024_uint8)
+        list_1024_uint8.append(HV_1024_uint8_b)
+
+        var list_16384_uint8 = List[HV[2**14, DType.uint8]]()
+        list_16384_uint8.append(HV_16384_uint8)
+        list_16384_uint8.append(HV_16384_uint8_b)
+
+        var list_512_uint16 = List[HV[2**9, DType.uint16]]()
+        list_512_uint16.append(HV_512_uint16)
+        list_512_uint16.append(HV_512_uint16_b)
+
+        var list_1024_uint16 = List[HV[2**10, DType.uint16]]()
+        list_1024_uint16.append(HV_1024_uint16)
+        list_1024_uint16.append(HV_1024_uint16_b)
+
+        var list_16384_uint16 = List[HV[2**14, DType.uint16]]()
+        list_16384_uint16.append(HV_16384_uint16)
+        list_16384_uint16.append(HV_16384_uint16_b)
+
+        var list_512_uint32 = List[HV[2**9, DType.uint32]]()
+        list_512_uint32.append(HV_512_uint32)
+        list_512_uint32.append(HV_512_uint32_b)
+
+        var list_1024_uint32 = List[HV[2**10, DType.uint32]]()
+        list_1024_uint32.append(HV_1024_uint32)
+        list_1024_uint32.append(HV_1024_uint32_b)
+
+        var list_16384_uint32 = List[HV[2**14, DType.uint32]]()
+        list_16384_uint32.append(HV_16384_uint32)
+        list_16384_uint32.append(HV_16384_uint32_b)
+
+        var list_512_uint64 = List[HV[2**9, DType.uint64]]()
+        list_512_uint64.append(HV_512_uint64)
+        list_512_uint64.append(HV_512_uint64_b)
+
+        var list_1024_uint64 = List[HV[2**10, DType.uint64]]()
+        list_1024_uint64.append(HV_1024_uint64)
+        list_1024_uint64.append(HV_1024_uint64_b)
+
+        var list_16384_uint64 = List[HV[2**14, DType.uint64]]()
+        list_16384_uint64.append(HV_16384_uint64)
+        list_16384_uint64.append(HV_16384_uint64_b)
+
         @parameter
         fn bench_bundle_majority_8() raises:
-            var list = List[HV[2**3, DType.uint8]]()
-            list.append(HV_8_uint8)
-            list.append(HV_8_uint8_b)
-            var res = HV.bundle_majority[2**3, DType.uint8](list)
+            var res = HV.bundle_majority[2**3, DType.uint8](list_8_uint8)
             benchmark.keep(res._storage)
 
         @parameter
         fn bench_bundle_majority_512() raises:
-            var list = List[HV[2**9, DType.uint8]]()
-            list.append(HV_512_uint8)
-            list.append(HV_512_uint8_b)
-            var res = HV.bundle_majority[2**9, DType.uint8](list)
+            var res = HV.bundle_majority[2**9, DType.uint8](list_512_uint8)
             benchmark.keep(res._storage)
 
         @parameter
         fn bench_bundle_majority_1024() raises:
-            var list = List[HV[2**10, DType.uint8]]()
-            list.append(HV_1024_uint8)
-            list.append(HV_1024_uint8_b)
-            var res = HV.bundle_majority[2**10, DType.uint8](list)
+            var res = HV.bundle_majority[2**10, DType.uint8](list_1024_uint8)
             benchmark.keep(res._storage)
 
         @parameter
         fn bench_bundle_majority_16384() raises:
-            var list = List[HV[2**14, DType.uint8]]()
-            list.append(HV_16384_uint8)
-            list.append(HV_16384_uint8_b)
-            var res = HV.bundle_majority[2**14, DType.uint8](list)
+            var res = HV.bundle_majority[2**14, DType.uint8](list_16384_uint8)
             benchmark.keep(res._storage)
 
         @parameter
         fn bench_bundle_majority_512_uint16() raises:
-            var list = List[HV[2**9, DType.uint16]]()
-            list.append(HV_512_uint16)
-            list.append(HV_512_uint16_b)
-            var res = HV.bundle_majority[2**9, DType.uint16](list)
+            var res = HV.bundle_majority[2**9, DType.uint16](list_512_uint16)
             benchmark.keep(res._storage)
 
         @parameter
         fn bench_bundle_majority_1024_uint16() raises:
-            var list = List[HV[2**10, DType.uint16]]()
-            list.append(HV_1024_uint16)
-            list.append(HV_1024_uint16_b)
-            var res = HV.bundle_majority[2**10, DType.uint16](list)
+            var res = HV.bundle_majority[2**10, DType.uint16](
+                list_1024_uint16
+            )
             benchmark.keep(res._storage)
 
         @parameter
         fn bench_bundle_majority_16384_uint16() raises:
-            var list = List[HV[2**14, DType.uint16]]()
-            list.append(HV_16384_uint16)
-            list.append(HV_16384_uint16_b)
-            var res = HV.bundle_majority[2**14, DType.uint16](list)
+            var res = HV.bundle_majority[2**14, DType.uint16](
+                list_16384_uint16
+            )
             benchmark.keep(res._storage)
 
         @parameter
         fn bench_bundle_majority_512_uint32() raises:
-            var list = List[HV[2**9, DType.uint32]]()
-            list.append(HV_512_uint32)
-            list.append(HV_512_uint32_b)
-            var res = HV.bundle_majority[2**9, DType.uint32](list)
+            var res = HV.bundle_majority[2**9, DType.uint32](list_512_uint32)
             benchmark.keep(res._storage)
 
         @parameter
         fn bench_bundle_majority_1024_uint32() raises:
-            var list = List[HV[2**10, DType.uint32]]()
-            list.append(HV_1024_uint32)
-            list.append(HV_1024_uint32_b)
-            var res = HV.bundle_majority[2**10, DType.uint32](list)
+            var res = HV.bundle_majority[2**10, DType.uint32](
+                list_1024_uint32
+            )
             benchmark.keep(res._storage)
 
         @parameter
         fn bench_bundle_majority_16384_uint32() raises:
-            var list = List[HV[2**14, DType.uint32]]()
-            list.append(HV_16384_uint32)
-            list.append(HV_16384_uint32_b)
-            var res = HV.bundle_majority[2**14, DType.uint32](list)
+            var res = HV.bundle_majority[2**14, DType.uint32](
+                list_16384_uint32
+            )
             benchmark.keep(res._storage)
 
         @parameter
         fn bench_bundle_majority_512_uint64() raises:
-            var list = List[HV[2**9, DType.uint64]]()
-            list.append(HV_512_uint64)
-            list.append(HV_512_uint64_b)
-            var res = HV.bundle_majority[2**9, DType.uint64](list)
+            var res = HV.bundle_majority[2**9, DType.uint64](list_512_uint64)
             benchmark.keep(res._storage)
 
         @parameter
         fn bench_bundle_majority_1024_uint64() raises:
-            var list = List[HV[2**10, DType.uint64]]()
-            list.append(HV_1024_uint64)
-            list.append(HV_1024_uint64_b)
-            var res = HV.bundle_majority[2**10, DType.uint64](list)
+            var res = HV.bundle_majority[2**10, DType.uint64](
+                list_1024_uint64
+            )
             benchmark.keep(res._storage)
 
         @parameter
         fn bench_bundle_majority_16384_uint64() raises:
-            var list = List[HV[2**14, DType.uint64]]()
-            list.append(HV_16384_uint64)
-            list.append(HV_16384_uint64_b)
-            var res = HV.bundle_majority[2**14, DType.uint64](list)
+            var res = HV.bundle_majority[2**14, DType.uint64](
+                list_16384_uint64
+            )
             benchmark.keep(res._storage)
 
         print("--- Benchmarking bundle_majority ---")
@@ -1614,212 +1639,248 @@ fn main() raises:
 
     fn benchmark_bundle_majority_10() raises:
         # bundle_majority (using 10 vectors: a, b, c, d, e, f, g, h, i, j)
+
+        var list_10_8_uint8 = List[HV[2**3, DType.uint8]]()
+        list_10_8_uint8.append(HV_8_uint8)
+        list_10_8_uint8.append(HV_8_uint8_b)
+        list_10_8_uint8.append(HV_8_uint8_c)
+        list_10_8_uint8.append(HV_8_uint8_d)
+        list_10_8_uint8.append(HV_8_uint8_e)
+        list_10_8_uint8.append(HV_8_uint8_f)
+        list_10_8_uint8.append(HV_8_uint8_g)
+        list_10_8_uint8.append(HV_8_uint8_h)
+        list_10_8_uint8.append(HV_8_uint8_i)
+        list_10_8_uint8.append(HV_8_uint8_j)
+
+        var list_10_512_uint8 = List[HV[2**9, DType.uint8]]()
+        list_10_512_uint8.append(HV_512_uint8)
+        list_10_512_uint8.append(HV_512_uint8_b)
+        list_10_512_uint8.append(HV_512_uint8_c)
+        list_10_512_uint8.append(HV_512_uint8_d)
+        list_10_512_uint8.append(HV_512_uint8_e)
+        list_10_512_uint8.append(HV_512_uint8_f)
+        list_10_512_uint8.append(HV_512_uint8_g)
+        list_10_512_uint8.append(HV_512_uint8_h)
+        list_10_512_uint8.append(HV_512_uint8_i)
+        list_10_512_uint8.append(HV_512_uint8_j)
+
+        var list_10_1024_uint8 = List[HV[2**10, DType.uint8]]()
+        list_10_1024_uint8.append(HV_1024_uint8)
+        list_10_1024_uint8.append(HV_1024_uint8_b)
+        list_10_1024_uint8.append(HV_1024_uint8_c)
+        list_10_1024_uint8.append(HV_1024_uint8_d)
+        list_10_1024_uint8.append(HV_1024_uint8_e)
+        list_10_1024_uint8.append(HV_1024_uint8_f)
+        list_10_1024_uint8.append(HV_1024_uint8_g)
+        list_10_1024_uint8.append(HV_1024_uint8_h)
+        list_10_1024_uint8.append(HV_1024_uint8_i)
+        list_10_1024_uint8.append(HV_1024_uint8_j)
+
+        var list_10_16384_uint8 = List[HV[2**14, DType.uint8]]()
+        list_10_16384_uint8.append(HV_16384_uint8)
+        list_10_16384_uint8.append(HV_16384_uint8_b)
+        list_10_16384_uint8.append(HV_16384_uint8_c)
+        list_10_16384_uint8.append(HV_16384_uint8_d)
+        list_10_16384_uint8.append(HV_16384_uint8_e)
+        list_10_16384_uint8.append(HV_16384_uint8_f)
+        list_10_16384_uint8.append(HV_16384_uint8_g)
+        list_10_16384_uint8.append(HV_16384_uint8_h)
+        list_10_16384_uint8.append(HV_16384_uint8_i)
+        list_10_16384_uint8.append(HV_16384_uint8_j)
+
+        var list_10_512_uint16 = List[HV[2**9, DType.uint16]]()
+        list_10_512_uint16.append(HV_512_uint16)
+        list_10_512_uint16.append(HV_512_uint16_b)
+        list_10_512_uint16.append(HV_512_uint16_c)
+        list_10_512_uint16.append(HV_512_uint16_d)
+        list_10_512_uint16.append(HV_512_uint16_e)
+        list_10_512_uint16.append(HV_512_uint16_f)
+        list_10_512_uint16.append(HV_512_uint16_g)
+        list_10_512_uint16.append(HV_512_uint16_h)
+        list_10_512_uint16.append(HV_512_uint16_i)
+        list_10_512_uint16.append(HV_512_uint16_j)
+
+        var list_10_1024_uint16 = List[HV[2**10, DType.uint16]]()
+        list_10_1024_uint16.append(HV_1024_uint16)
+        list_10_1024_uint16.append(HV_1024_uint16_b)
+        list_10_1024_uint16.append(HV_1024_uint16_c)
+        list_10_1024_uint16.append(HV_1024_uint16_d)
+        list_10_1024_uint16.append(HV_1024_uint16_e)
+        list_10_1024_uint16.append(HV_1024_uint16_f)
+        list_10_1024_uint16.append(HV_1024_uint16_g)
+        list_10_1024_uint16.append(HV_1024_uint16_h)
+        list_10_1024_uint16.append(HV_1024_uint16_i)
+        list_10_1024_uint16.append(HV_1024_uint16_j)
+
+        var list_10_16384_uint16 = List[HV[2**14, DType.uint16]]()
+        list_10_16384_uint16.append(HV_16384_uint16)
+        list_10_16384_uint16.append(HV_16384_uint16_b)
+        list_10_16384_uint16.append(HV_16384_uint16_c)
+        list_10_16384_uint16.append(HV_16384_uint16_d)
+        list_10_16384_uint16.append(HV_16384_uint16_e)
+        list_10_16384_uint16.append(HV_16384_uint16_f)
+        list_10_16384_uint16.append(HV_16384_uint16_g)
+        list_10_16384_uint16.append(HV_16384_uint16_h)
+        list_10_16384_uint16.append(HV_16384_uint16_i)
+        list_10_16384_uint16.append(HV_16384_uint16_j)
+
+        var list_10_512_uint32 = List[HV[2**9, DType.uint32]]()
+        list_10_512_uint32.append(HV_512_uint32)
+        list_10_512_uint32.append(HV_512_uint32_b)
+        list_10_512_uint32.append(HV_512_uint32_c)
+        list_10_512_uint32.append(HV_512_uint32_d)
+        list_10_512_uint32.append(HV_512_uint32_e)
+        list_10_512_uint32.append(HV_512_uint32_f)
+        list_10_512_uint32.append(HV_512_uint32_g)
+        list_10_512_uint32.append(HV_512_uint32_h)
+        list_10_512_uint32.append(HV_512_uint32_i)
+        list_10_512_uint32.append(HV_512_uint32_j)
+
+        var list_10_1024_uint32 = List[HV[2**10, DType.uint32]]()
+        list_10_1024_uint32.append(HV_1024_uint32)
+        list_10_1024_uint32.append(HV_1024_uint32_b)
+        list_10_1024_uint32.append(HV_1024_uint32_c)
+        list_10_1024_uint32.append(HV_1024_uint32_d)
+        list_10_1024_uint32.append(HV_1024_uint32_e)
+        list_10_1024_uint32.append(HV_1024_uint32_f)
+        list_10_1024_uint32.append(HV_1024_uint32_g)
+        list_10_1024_uint32.append(HV_1024_uint32_h)
+        list_10_1024_uint32.append(HV_1024_uint32_i)
+        list_10_1024_uint32.append(HV_1024_uint32_j)
+
+        var list_10_16384_uint32 = List[HV[2**14, DType.uint32]]()
+        list_10_16384_uint32.append(HV_16384_uint32)
+        list_10_16384_uint32.append(HV_16384_uint32_b)
+        list_10_16384_uint32.append(HV_16384_uint32_c)
+        list_10_16384_uint32.append(HV_16384_uint32_d)
+        list_10_16384_uint32.append(HV_16384_uint32_e)
+        list_10_16384_uint32.append(HV_16384_uint32_f)
+        list_10_16384_uint32.append(HV_16384_uint32_g)
+        list_10_16384_uint32.append(HV_16384_uint32_h)
+        list_10_16384_uint32.append(HV_16384_uint32_i)
+        list_10_16384_uint32.append(HV_16384_uint32_j)
+
+        var list_10_512_uint64 = List[HV[2**9, DType.uint64]]()
+        list_10_512_uint64.append(HV_512_uint64)
+        list_10_512_uint64.append(HV_512_uint64_b)
+        list_10_512_uint64.append(HV_512_uint64_c)
+        list_10_512_uint64.append(HV_512_uint64_d)
+        list_10_512_uint64.append(HV_512_uint64_e)
+        list_10_512_uint64.append(HV_512_uint64_f)
+        list_10_512_uint64.append(HV_512_uint64_g)
+        list_10_512_uint64.append(HV_512_uint64_h)
+        list_10_512_uint64.append(HV_512_uint64_i)
+        list_10_512_uint64.append(HV_512_uint64_j)
+
+        var list_10_1024_uint64 = List[HV[2**10, DType.uint64]]()
+        list_10_1024_uint64.append(HV_1024_uint64)
+        list_10_1024_uint64.append(HV_1024_uint64_b)
+        list_10_1024_uint64.append(HV_1024_uint64_c)
+        list_10_1024_uint64.append(HV_1024_uint64_d)
+        list_10_1024_uint64.append(HV_1024_uint64_e)
+        list_10_1024_uint64.append(HV_1024_uint64_f)
+        list_10_1024_uint64.append(HV_1024_uint64_g)
+        list_10_1024_uint64.append(HV_1024_uint64_h)
+        list_10_1024_uint64.append(HV_1024_uint64_i)
+        list_10_1024_uint64.append(HV_1024_uint64_j)
+
+        var list_10_16384_uint64 = List[HV[2**14, DType.uint64]]()
+        list_10_16384_uint64.append(HV_16384_uint64)
+        list_10_16384_uint64.append(HV_16384_uint64_b)
+        list_10_16384_uint64.append(HV_16384_uint64_c)
+        list_10_16384_uint64.append(HV_16384_uint64_d)
+        list_10_16384_uint64.append(HV_16384_uint64_e)
+        list_10_16384_uint64.append(HV_16384_uint64_f)
+        list_10_16384_uint64.append(HV_16384_uint64_g)
+        list_10_16384_uint64.append(HV_16384_uint64_h)
+        list_10_16384_uint64.append(HV_16384_uint64_i)
+        list_10_16384_uint64.append(HV_16384_uint64_j)
+
         @parameter
         fn bench_bundle_majority_10_8() raises:
-            var list = List[HV[2**3, DType.uint8]]()
-            list.append(HV_8_uint8)
-            list.append(HV_8_uint8_b)
-            list.append(HV_8_uint8_c)
-            list.append(HV_8_uint8_d)
-            list.append(HV_8_uint8_e)
-            list.append(HV_8_uint8_f)
-            list.append(HV_8_uint8_g)
-            list.append(HV_8_uint8_h)
-            list.append(HV_8_uint8_i)
-            list.append(HV_8_uint8_j)
-            var res = HV.bundle_majority[2**3, DType.uint8](list)
+            var res = HV.bundle_majority[2**3, DType.uint8](list_10_8_uint8)
             benchmark.keep(res._storage)
 
         @parameter
         fn bench_bundle_majority_10_512() raises:
-            var list = List[HV[2**9, DType.uint8]]()
-            list.append(HV_512_uint8)
-            list.append(HV_512_uint8_b)
-            list.append(HV_512_uint8_c)
-            list.append(HV_512_uint8_d)
-            list.append(HV_512_uint8_e)
-            list.append(HV_512_uint8_f)
-            list.append(HV_512_uint8_g)
-            list.append(HV_512_uint8_h)
-            list.append(HV_512_uint8_i)
-            list.append(HV_512_uint8_j)
-            var res = HV.bundle_majority[2**9, DType.uint8](list)
+            var res = HV.bundle_majority[2**9, DType.uint8](list_10_512_uint8)
             benchmark.keep(res._storage)
 
         @parameter
         fn bench_bundle_majority_10_1024() raises:
-            var list = List[HV[2**10, DType.uint8]]()
-            list.append(HV_1024_uint8)
-            list.append(HV_1024_uint8_b)
-            list.append(HV_1024_uint8_c)
-            list.append(HV_1024_uint8_d)
-            list.append(HV_1024_uint8_e)
-            list.append(HV_1024_uint8_f)
-            list.append(HV_1024_uint8_g)
-            list.append(HV_1024_uint8_h)
-            list.append(HV_1024_uint8_i)
-            list.append(HV_1024_uint8_j)
-            var res = HV.bundle_majority[2**10, DType.uint8](list)
+            var res = HV.bundle_majority[2**10, DType.uint8](
+                list_10_1024_uint8
+            )
             benchmark.keep(res._storage)
 
         @parameter
         fn bench_bundle_majority_10_16384() raises:
-            var list = List[HV[2**14, DType.uint8]]()
-            list.append(HV_16384_uint8)
-            list.append(HV_16384_uint8_b)
-            list.append(HV_16384_uint8_c)
-            list.append(HV_16384_uint8_d)
-            list.append(HV_16384_uint8_e)
-            list.append(HV_16384_uint8_f)
-            list.append(HV_16384_uint8_g)
-            list.append(HV_16384_uint8_h)
-            list.append(HV_16384_uint8_i)
-            list.append(HV_16384_uint8_j)
-            var res = HV.bundle_majority[2**14, DType.uint8](list)
+            var res = HV.bundle_majority[2**14, DType.uint8](
+                list_10_16384_uint8
+            )
             benchmark.keep(res._storage)
 
         @parameter
         fn bench_bundle_majority_10_512_uint16() raises:
-            var list = List[HV[2**9, DType.uint16]]()
-            list.append(HV_512_uint16)
-            list.append(HV_512_uint16_b)
-            list.append(HV_512_uint16_c)
-            list.append(HV_512_uint16_d)
-            list.append(HV_512_uint16_e)
-            list.append(HV_512_uint16_f)
-            list.append(HV_512_uint16_g)
-            list.append(HV_512_uint16_h)
-            list.append(HV_512_uint16_i)
-            list.append(HV_512_uint16_j)
-            var res = HV.bundle_majority[2**9, DType.uint16](list)
+            var res = HV.bundle_majority[2**9, DType.uint16](
+                list_10_512_uint16
+            )
             benchmark.keep(res._storage)
 
         @parameter
         fn bench_bundle_majority_10_1024_uint16() raises:
-            var list = List[HV[2**10, DType.uint16]]()
-            list.append(HV_1024_uint16)
-            list.append(HV_1024_uint16_b)
-            list.append(HV_1024_uint16_c)
-            list.append(HV_1024_uint16_d)
-            list.append(HV_1024_uint16_e)
-            list.append(HV_1024_uint16_f)
-            list.append(HV_1024_uint16_g)
-            list.append(HV_1024_uint16_h)
-            list.append(HV_1024_uint16_i)
-            list.append(HV_1024_uint16_j)
-            var res = HV.bundle_majority[2**10, DType.uint16](list)
+            var res = HV.bundle_majority[2**10, DType.uint16](
+                list_10_1024_uint16
+            )
             benchmark.keep(res._storage)
 
         @parameter
         fn bench_bundle_majority_10_16384_uint16() raises:
-            var list = List[HV[2**14, DType.uint16]]()
-            list.append(HV_16384_uint16)
-            list.append(HV_16384_uint16_b)
-            list.append(HV_16384_uint16_c)
-            list.append(HV_16384_uint16_d)
-            list.append(HV_16384_uint16_e)
-            list.append(HV_16384_uint16_f)
-            list.append(HV_16384_uint16_g)
-            list.append(HV_16384_uint16_h)
-            list.append(HV_16384_uint16_i)
-            list.append(HV_16384_uint16_j)
-            var res = HV.bundle_majority[2**14, DType.uint16](list)
+            var res = HV.bundle_majority[2**14, DType.uint16](
+                list_10_16384_uint16
+            )
             benchmark.keep(res._storage)
 
         @parameter
         fn bench_bundle_majority_10_512_uint32() raises:
-            var list = List[HV[2**9, DType.uint32]]()
-            list.append(HV_512_uint32)
-            list.append(HV_512_uint32_b)
-            list.append(HV_512_uint32_c)
-            list.append(HV_512_uint32_d)
-            list.append(HV_512_uint32_e)
-            list.append(HV_512_uint32_f)
-            list.append(HV_512_uint32_g)
-            list.append(HV_512_uint32_h)
-            list.append(HV_512_uint32_i)
-            list.append(HV_512_uint32_j)
-            var res = HV.bundle_majority[2**9, DType.uint32](list)
+            var res = HV.bundle_majority[2**9, DType.uint32](
+                list_10_512_uint32
+            )
             benchmark.keep(res._storage)
 
         @parameter
         fn bench_bundle_majority_10_1024_uint32() raises:
-            var list = List[HV[2**10, DType.uint32]]()
-            list.append(HV_1024_uint32)
-            list.append(HV_1024_uint32_b)
-            list.append(HV_1024_uint32_c)
-            list.append(HV_1024_uint32_d)
-            list.append(HV_1024_uint32_e)
-            list.append(HV_1024_uint32_f)
-            list.append(HV_1024_uint32_g)
-            list.append(HV_1024_uint32_h)
-            list.append(HV_1024_uint32_i)
-            list.append(HV_1024_uint32_j)
-            var res = HV.bundle_majority[2**10, DType.uint32](list)
+            var res = HV.bundle_majority[2**10, DType.uint32](
+                list_10_1024_uint32
+            )
             benchmark.keep(res._storage)
 
         @parameter
         fn bench_bundle_majority_10_16384_uint32() raises:
-            var list = List[HV[2**14, DType.uint32]]()
-            list.append(HV_16384_uint32)
-            list.append(HV_16384_uint32_b)
-            list.append(HV_16384_uint32_c)
-            list.append(HV_16384_uint32_d)
-            list.append(HV_16384_uint32_e)
-            list.append(HV_16384_uint32_f)
-            list.append(HV_16384_uint32_g)
-            list.append(HV_16384_uint32_h)
-            list.append(HV_16384_uint32_i)
-            list.append(HV_16384_uint32_j)
-            var res = HV.bundle_majority[2**14, DType.uint32](list)
+            var res = HV.bundle_majority[2**14, DType.uint32](
+                list_10_16384_uint32
+            )
             benchmark.keep(res._storage)
 
         @parameter
         fn bench_bundle_majority_10_512_uint64() raises:
-            var list = List[HV[2**9, DType.uint64]]()
-            list.append(HV_512_uint64)
-            list.append(HV_512_uint64_b)
-            list.append(HV_512_uint64_c)
-            list.append(HV_512_uint64_d)
-            list.append(HV_512_uint64_e)
-            list.append(HV_512_uint64_f)
-            list.append(HV_512_uint64_g)
-            list.append(HV_512_uint64_h)
-            list.append(HV_512_uint64_i)
-            list.append(HV_512_uint64_j)
-            var res = HV.bundle_majority[2**9, DType.uint64](list)
+            var res = HV.bundle_majority[2**9, DType.uint64](
+                list_10_512_uint64
+            )
             benchmark.keep(res._storage)
 
         @parameter
         fn bench_bundle_majority_10_1024_uint64() raises:
-            var list = List[HV[2**10, DType.uint64]]()
-            list.append(HV_1024_uint64)
-            list.append(HV_1024_uint64_b)
-            list.append(HV_1024_uint64_c)
-            list.append(HV_1024_uint64_d)
-            list.append(HV_1024_uint64_e)
-            list.append(HV_1024_uint64_f)
-            list.append(HV_1024_uint64_g)
-            list.append(HV_1024_uint64_h)
-            list.append(HV_1024_uint64_i)
-            list.append(HV_1024_uint64_j)
-            var res = HV.bundle_majority[2**10, DType.uint64](list)
+            var res = HV.bundle_majority[2**10, DType.uint64](
+                list_10_1024_uint64
+            )
             benchmark.keep(res._storage)
 
         @parameter
         fn bench_bundle_majority_10_16384_uint64() raises:
-            var list = List[HV[2**14, DType.uint64]]()
-            list.append(HV_16384_uint64)
-            list.append(HV_16384_uint64_b)
-            list.append(HV_16384_uint64_c)
-            list.append(HV_16384_uint64_d)
-            list.append(HV_16384_uint64_e)
-            list.append(HV_16384_uint64_f)
-            list.append(HV_16384_uint64_g)
-            list.append(HV_16384_uint64_h)
-            list.append(HV_16384_uint64_i)
-            list.append(HV_16384_uint64_j)
-            var res = HV.bundle_majority[2**14, DType.uint64](list)
+            var res = HV.bundle_majority[2**14, DType.uint64](
+                list_10_16384_uint64
+            )
             benchmark.keep(res._storage)
 
         print("--- Benchmarking bundle_majority (10 vectors) ---")
@@ -1829,19 +1890,19 @@ fn main() raises:
         # --- Benchmarking bundle_majority (10 vectors) ---
         # Dimension | DType | Mean Time (ns)
         # ----------|-------|-------------
-        # 8 | uint8 | 2712.9639936037015
-        # 512 | uint8 | 3617.18601593259
-        # 1024 | uint8 | 4719.520989371252
-        # 16384 | uint8 | 32466.004965028344
-        # 512 | uint16 | 3547.0951674178773
-        # 1024 | uint16 | 4312.358266586798
-        # 16384 | uint16 | 28613.587390282224
-        # 512 | uint32 | 3583.35214844654
-        # 1024 | uint32 | 4559.738433404219
-        # 16384 | uint32 | 29070.23105324524
-        # 512 | uint64 | 3547.9549400926144
-        # 1024 | uint64 | 4222.967206534751
-        # 16384 | uint64 | 24146.93276
+        # 8 | uint8 | 2407.646713
+        # 512 | uint8 | 3017.0305893089308
+        # 1024 | uint8 | 3620.541425320801
+        # 16384 | uint8 | 23959.1159258252
+        # 512 | uint16 | 2886.369510558415
+        # 1024 | uint16 | 3415.8838291927595
+        # 16384 | uint16 | 21456.24353
+        # 512 | uint32 | 3042.2436265261354
+        # 1024 | uint32 | 3732.0632043108494
+        # 16384 | uint32 | 23029.75721
+        # 512 | uint64 | 3082.532537030636
+        # 1024 | uint64 | 3503.802237333902
+        # 16384 | uint64 | 18409.93035
 
         # Run the bundle_majority_10 benchmark
         var bundle_majority_10_time_8 = benchmark.run[
